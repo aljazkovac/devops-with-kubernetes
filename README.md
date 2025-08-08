@@ -5,3 +5,4 @@ Course [DevOps with Kubernetes](https://courses.mooc.fi/org/uh-cs/courses/devops
 ## Chapter 2
 
 - [1.1](https://github.com/aljazkovac/devops-with-kubernetes/tree/1.1/log_output)
+- [1.2](https://github.com/aljazkovac/devops-with-kubernetes/tree/1.2/todo_app)
