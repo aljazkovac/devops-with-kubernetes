@@ -16,8 +16,10 @@ spec:
     spec:
       containers:
         - name: log-output
-          image: aljazkovac/kubernetes-1-1:latest
+          image: aljazkovac/log-output:latest
           imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3000
           resources:
             requests:
               cpu: "100m"
