@@ -1,0 +1,12 @@
+{
+  "name": "pingpong",
+  "version": "1.0.0",
+  "description": "Ping-pong counter application",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

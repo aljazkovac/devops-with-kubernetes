@@ -12,3 +12,4 @@ Course [DevOps with Kubernetes](https://courses.mooc.fi/org/uh-cs/courses/devops
 - [1.6](https://github.com/aljazkovac/devops-with-kubernetes/tree/1.6/todo_app)
 - [1.7](https://github.com/aljazkovac/devops-with-kubernetes/tree/1.7/log_output) == I made a mistake here and posted the following link as a submission: <https://github.com/aljazkovac/devops-with-kubernetes/tree/1.7/todo_app>
 - [1.8](https://github.com/aljazkovac/devops-with-kubernetes/tree/1.8/todo_app)
+- [1.9](https://github.com/aljazkovac/devops-with-kubernetes/tree/1.9/pingpong)
