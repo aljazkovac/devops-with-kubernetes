@@ -15,11 +15,14 @@ spec:
         app: log-output
     spec:
       containers:
-        - name: log-output
-          image: aljazkovac/log-output:latest
-          imagePullPolicy: IfNotPresent
+        - name: log-writer
+          image: aljazkovac/log-writer:latest
+          imagePullPolicy: Always
           ports:
-            - containerPort: 3000
+            - containerPort: 3001
+          volumeMounts:
+            - name: shared-logs
+              mountPath: /shared
           resources:
             requests:
               cpu: "100m"
@@ -27,3 +30,21 @@ spec:
             limits:
               cpu: "250m"
               memory: "256Mi"
+        - name: log-reader
+          image: aljazkovac/log-reader:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+          volumeMounts:
+            - name: shared-logs
+              mountPath: /shared
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "250m"
+              memory: "256Mi"
+      volumes:
+        - name: shared-logs
+          emptyDir: {}
