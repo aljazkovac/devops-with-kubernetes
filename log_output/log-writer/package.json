@@ -1,13 +1,16 @@
 {
-  "name": "ex-1-1",
+  "name": "log-output",
   "version": "1.0.0",
-  "description": "DevOps with Kubernetes Exercise 1.1",
+  "description": "Log output application with timestamp and UUID",
   "main": "app.js",
   "scripts": {
     "start": "node app.js"
   },
   "engines": {
     "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
   },
   "keywords": [
     "kubernetes",
