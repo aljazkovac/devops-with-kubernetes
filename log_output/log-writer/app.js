@@ -24,7 +24,7 @@ const getCurrentStatus = () => {
 };
 
 // Status endpoint
-app.get('/status', (req, res) => {
+app.get("/status", (req, res) => {
   const status = getCurrentStatus();
   res.json(status);
 });
@@ -47,4 +47,3 @@ setInterval(() => {
     }
   });
 }, 5000);
-
