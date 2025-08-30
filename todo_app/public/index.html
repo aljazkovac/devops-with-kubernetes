@@ -27,22 +27,25 @@
             text-align: center;
             font-size: 18px;
         }
-        .port-info {
-            background-color: #e7f3ff;
-            padding: 10px;
-            border-radius: 4px;
-            margin-top: 20px;
+        .image-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+        #daily-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>TODO Application</h1>
-        <p>Welcome to the TODO app!</p>
-        <p>This is a simple HTML page served from Kubernetes.</p>
-        <div class="port-info">
-            <p><strong>Note:</strong> The server port is configured via environment variables.</p>
+        <h1>The Project App</h1>
+        <div class="image-container">
+            <img src="/image" alt="Random image from Lorem Picsum" id="daily-image">
         </div>
+        <p>DevOps with Kubernetes 2025</p>
     </div>
 </body>
 </html>
