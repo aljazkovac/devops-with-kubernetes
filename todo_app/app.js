@@ -5,10 +5,13 @@ const axios = require("axios");
 const app = express();
 const port = process.env.PORT || 3000;
 
+// Middleware for parsing form data
+app.use(express.urlencoded({ extended: true }));
+
 // Image storage configuration
-const IMAGE_DIR = "/app/images";
-const CURRENT_IMAGE_PATH = path.join(IMAGE_DIR, "current.jpg");
-const METADATA_PATH = path.join(IMAGE_DIR, "metadata.json");
+const IMAGE_DIR = "./images";
+const CURRENT_IMAGE_PATH = path.resolve(IMAGE_DIR, "current.jpg");
+const METADATA_PATH = path.resolve(IMAGE_DIR, "metadata.json");
 const CACHE_DURATION = 10 * 60 * 1000; // 10 minutes in milliseconds
 const PICSUM_URL = "https://picsum.photos/1200";
 

@@ -1,51 +1,180 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TODO App</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f5f5f5;
-        }
-        .container {
-            background-color: white;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        h1 {
-            color: #333;
-            text-align: center;
-        }
-        p {
-            color: #666;
-            text-align: center;
-            font-size: 18px;
-        }
-        .image-container {
-            text-align: center;
-            margin: 20px 0;
-        }
-        #daily-image {
-            max-width: 100%;
-            height: auto;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-        }
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f5f5f5;
+      }
+      .container {
+        background-color: white;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        color: #333;
+        text-align: center;
+      }
+      p {
+        color: #666;
+        text-align: center;
+        font-size: 18px;
+      }
+      .image-container {
+        text-align: center;
+        margin: 20px 0;
+      }
+      #daily-image {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      }
+      .todo-section {
+        margin: 30px 0;
+        padding: 20px 0;
+        border-top: 1px solid #eee;
+      }
+      .todo-section h2 {
+        color: #333;
+        text-align: center;
+        margin-bottom: 20px;
+      }
+      .todo-form {
+        margin-bottom: 30px;
+      }
+      .todo-input-container {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 10px;
+      }
+      #todo-input {
+        flex: 1;
+        padding: 10px;
+        border: 2px solid #ddd;
+        border-radius: 4px;
+        font-size: 16px;
+        transition: border-color 0.3s;
+      }
+      #todo-input:focus {
+        outline: none;
+        border-color: #4caf50;
+      }
+      .send-button {
+        padding: 10px 20px;
+        background-color: "gray";
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+      .send-button:hover {
+        background-color: "gray";
+      }
+      .character-count {
+        text-align: right;
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 10px;
+      }
+      .todo-list h3 {
+        color: #333;
+        margin-bottom: 15px;
+      }
+      #todo-items {
+        list-style-type: none;
+        padding: 0;
+      }
+      #todo-items li {
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 12px;
+        margin-bottom: 8px;
+        color: #333;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="container">
-        <h1>The Project App</h1>
-        <div class="image-container">
-            <img src="/image" alt="Random image from Lorem Picsum" id="daily-image">
+      <h1>The Project App</h1>
+      <div class="image-container">
+        <img
+          src="/image"
+          alt="Random image from Lorem Picsum"
+          id="daily-image"
+        />
+      </div>
+
+      <!-- TODO App Section -->
+      <div class="todo-section">
+        <h2>TODO</h2>
+        <form class="todo-form" action="/todos" method="POST">
+          <div class="todo-input-container">
+            <input
+              type="text"
+              id="todo-input"
+              name="todo"
+              maxlength="140"
+              placeholder="Enter a new todo (max 140 characters)..."
+              required
+            />
+            <button type="submit" class="send-button">Send</button>
+          </div>
+          <div class="character-count">
+            <span id="char-count">0</span>/140 characters
+          </div>
+        </form>
+
+        <div class="todo-list">
+          <h3>Your TODOs:</h3>
+          <ul id="todo-items">
+            <li>Learn about Kubernetes deployments</li>
+            <li>Set up persistent volumes for image storage</li>
+            <li>Implement todo functionality</li>
+            <li>Add input validation and character limits</li>
+            <li>Deploy the application to the cluster</li>
+          </ul>
         </div>
-        <p>DevOps with Kubernetes 2025</p>
+      </div>
+
+      <p>DevOps with Kubernetes 2025</p>
     </div>
-</body>
+
+    <script>
+      // TODO(human)
+      // Character counting and input validation logic goes here
+      // - Update the character count display as user types
+      // - Disable/enable send button based on character limit
+      // - Add visual feedback for character limit warnings
+      const todoInput = document.getElementById("todo-input");
+      const characterCountElement = document.getElementById("char-count");
+      const sendButton = document.querySelector(".send-button");
+      todoInput.addEventListener("input", function () {
+        const todoInputText = todoInput.value;
+        characterCountElement.textContent = todoInputText.length;
+        if (todoInputText.length == 0) {
+          sendButton.disabled = true;
+          sendButton.style.backgroundColor = "grey";
+        } else {
+          sendButton.disabled = false;
+          sendButton.style.backgroundColor = "#4caf50";
+        }
+        if (todoInputText.length > 120) {
+          characterCountElement.style.color = "red";
+        } else {
+          characterCountElement.style.color = "#666";
+        }
+      });
+    </script>
+  </body>
 </html>
