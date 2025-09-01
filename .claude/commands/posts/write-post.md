@@ -1,6 +1,6 @@
 ---
 allowed-tools: Bash(git checkout:*)
-argument-hint: [exerciseNumber]
+argument-hint: [exerciseNumber, exerciseInstructions]
 description: Write a post about the solved exercise
 model: claude-sonnet-4-20250514
 ---
