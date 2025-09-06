@@ -1,13 +1,10 @@
 const crypto = require("crypto");
-const express = require("express");
 const fs = require("fs");
 const path = require("path");
 
-const app = express();
-
 // Generate a UUID that will stay the same for the lifetime of the application
 const appId = crypto.randomUUID();
-console.log(`Application started with ID: ${appId}`);
+console.log(`Log writer started with ID: ${appId}`);
 
 // Ensure shared directory exists
 const logsDir = "/shared";
@@ -22,17 +19,6 @@ const getCurrentStatus = () => {
   const timestamp = new Date().toISOString().replace("T", " ").substring(0, 19);
   return { timestamp, appId };
 };
-
-// Status endpoint
-app.get("/status", (req, res) => {
-  const status = getCurrentStatus();
-  res.json(status);
-});
-
-const port = process.env.PORT || 3001;
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
-});
 
 // Write timestamp with UUID to file every 5 seconds
 setInterval(() => {
