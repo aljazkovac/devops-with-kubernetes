@@ -5,6 +5,9 @@ const axios = require("axios");
 const app = express();
 const port = process.env.PORT || 3000;
 
+// Todo backend configuration
+const TODO_BACKEND_URL = process.env.TODO_BACKEND_URL || "http://todo-backend-svc:3001";
+
 // Middleware for parsing form data
 app.use(express.urlencoded({ extended: true }));
 
@@ -87,6 +90,45 @@ function shouldFetchNewImage() {
   }
 }
 
+// CLIENT-SIDE RENDERING: API endpoint called by JavaScript fetch() in index.html
+// This acts as a proxy between browser JavaScript and todo-backend microservice
+// Browser → /api/todos → todo-backend-svc:3001 → returns JSON for dynamic rendering
+app.get("/api/todos", async (req, res) => {
+  try {
+    const response = await axios.get(`${TODO_BACKEND_URL}/todos`);
+    res.json(response.data);
+  } catch (error) {
+    console.error("Error fetching todos:", error.message);
+    res.status(500).json({ error: "Failed to fetch todos" });
+  }
+});
+
+// SERVER-SIDE RENDERING: Handle HTML form submission (traditional web approach)
+// Form POST → server processes → redirect back to main page
+// Browser → /todos → todo-backend-svc:3001 → redirect to refresh page
+app.post("/todos", async (req, res) => {
+  try {
+    const { todo } = req.body;
+    if (!todo || todo.trim().length === 0) {
+      return res.redirect("/?error=empty");
+    }
+    
+    const response = await axios.post(`${TODO_BACKEND_URL}/todos`, {
+      text: todo.trim()
+    });
+    
+    console.log("Todo created:", response.data.todo);
+    res.redirect("/");
+  } catch (error) {
+    console.error("Error creating todo:", error.message);
+    res.redirect("/?error=failed");
+  }
+});
+
+// HYBRID ARCHITECTURE: Serve static HTML (server-side) + dynamic content loading (client-side)
+// 1. Server-side: We serve the HTML structure immediately for fast initial load
+// 2. Client-side: JavaScript in HTML then calls /api/todos to dynamically load todo data
+// This combines the benefits of traditional server rendering with modern dynamic updates
 app.get("/", async (req, res) => {
   try {
     console.log("Main route accessed, checking if new image needed...");
@@ -100,6 +142,7 @@ app.get("/", async (req, res) => {
     } else {
       console.log("Using cached image");
     }
+    // Send static HTML file - todos will be loaded dynamically by client JavaScript
     res.sendFile(path.join(__dirname, "public", "index.html"));
   } catch (error) {
     console.error("Error handling request:", error.message);

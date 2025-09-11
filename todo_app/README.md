@@ -1,43 +1,32 @@
-# TODO Application
+# Todo App
 
-A full-featured web application demonstrating Kubernetes deployments, persistent storage, image caching, and user input functionality. Evolved through exercises 1.2, 1.4, 1.5, 1.6, 1.8, 1.12, and 1.13.
+Frontend web application with image caching and todo functionality. Works with todo-backend microservice.
 
-## Architecture
-
-Express.js web application featuring:
-
-- **HTML Interface**: Interactive todo form with input validation
-- **Image Caching**: Hourly updated random images from Lorem Picsum 
-- **Persistent Storage**: Image cache survives pod restarts
-- **Input Validation**: Character limits and user feedback
-
-## Kubernetes Deployment
+## Local Development
 
 ```bash
-# Apply all manifests
-kubectl apply -f manifests/
-
-# Check deployment status
-kubectl get pods -l app=todo-app
-
-# View application logs
-kubectl logs -f deployment/todo-app
-
-# Access via ingress (if configured)
-curl http://localhost:3000/
+npm install
+npm start  # Runs on port 3000
 ```
 
-## Application Endpoints
+## Docker
 
-- `GET /` - Main TODO interface with image and form
-- `GET /image` - Serves cached random image
-- `POST /` - Todo form submission (placeholder functionality)
+```bash
+docker build -t aljazkovac/todo-app .
+docker run -p 3000:8080 aljazkovac/todo-app
+```
 
-## Configuration
+## Kubernetes
 
-The application uses:
+```bash
+kubectl apply -f manifests/
+```
 
-- Persistent volume for image caching (`/app/images`)
-- ClusterIP service on port 2345
-- Ingress controller for external access  
-- Resource limits for optimal performance
+Access at `http://localhost:3000/`
+
+## Features
+
+- Todo form with character validation
+- Random image caching from Lorem Picsum
+- Communicates with todo-backend service
+- Persistent storage for images

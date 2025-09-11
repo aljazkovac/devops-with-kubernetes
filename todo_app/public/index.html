@@ -138,11 +138,7 @@
         <div class="todo-list">
           <h3>Your TODOs:</h3>
           <ul id="todo-items">
-            <li>Learn about Kubernetes deployments</li>
-            <li>Set up persistent volumes for image storage</li>
-            <li>Implement todo functionality</li>
-            <li>Add input validation and character limits</li>
-            <li>Deploy the application to the cluster</li>
+            <!-- Todos will be loaded dynamically -->
           </ul>
         </div>
       </div>
@@ -151,14 +147,11 @@
     </div>
 
     <script>
-      // TODO(human)
-      // Character counting and input validation logic goes here
-      // - Update the character count display as user types
-      // - Disable/enable send button based on character limit
-      // - Add visual feedback for character limit warnings
+      // Character counting and input validation logic
       const todoInput = document.getElementById("todo-input");
       const characterCountElement = document.getElementById("char-count");
       const sendButton = document.querySelector(".send-button");
+
       todoInput.addEventListener("input", function () {
         const todoInputText = todoInput.value;
         characterCountElement.textContent = todoInputText.length;
@@ -175,6 +168,42 @@
           characterCountElement.style.color = "#666";
         }
       });
+
+      // CLIENT-SIDE RENDERING: Dynamically load todos after page loads
+      // This calls our /api/todos endpoint which acts as a proxy to todo-backend microservice
+      async function loadTodos() {
+        try {
+          const response = await fetch("/api/todos");
+          const data = await response.json();
+          const todoList = document.getElementById("todo-items");
+
+          todoList.innerHTML = "";
+
+          if (data.todos && data.todos.length > 0) {
+            data.todos.forEach((todo) => {
+              const li = document.createElement("li");
+              li.textContent = todo.text;
+              todoList.appendChild(li);
+            });
+          } else {
+            const li = document.createElement("li");
+            li.textContent = "No todos yet. Add one above!";
+            li.style.fontStyle = "italic";
+            li.style.color = "#999";
+            todoList.appendChild(li);
+          }
+        } catch (error) {
+          console.error("Error loading todos:", error);
+          const todoList = document.getElementById("todo-items");
+          const li = document.createElement("li");
+          li.textContent = "Error loading todos. Please refresh the page.";
+          li.style.color = "red";
+          todoList.appendChild(li);
+        }
+      }
+
+      // Load todos when page loads
+      document.addEventListener("DOMContentLoaded", loadTodos);
     </script>
   </body>
 </html>
