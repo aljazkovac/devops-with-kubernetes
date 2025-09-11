@@ -23,3 +23,4 @@ Course [DevOps with Kubernetes](https://courses.mooc.fi/org/uh-cs/courses/devops
 ### Part 2: Networking Between Pods
 
 - [2.1](https://github.com/aljazkovac/devops-with-kubernetes/tree/2.1) - Connect Log Output and Ping Pong Applications with HTTP
+- [2.2](https://github.com/aljazkovac/devops-with-kubernetes/tree/2.2) - Create a Todo Backend Service
