@@ -1,8 +1,8 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: exercises
   name: pingpong-dep
+  namespace: exercises
 spec:
   replicas: 1
   selector:

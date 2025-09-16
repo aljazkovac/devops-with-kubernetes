@@ -4,4 +4,4 @@ metadata:
   name: exercises
   labels:
     name: exercises
-    purpose: course-exercises
+    purpose: devops-with-kubernetes-exercises
