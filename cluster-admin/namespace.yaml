@@ -5,3 +5,13 @@ metadata:
   labels:
     name: exercises
     purpose: devops-with-kubernetes-exercises
+
+---
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: project
+  labels:
+    name: project
+    purpose: devops-with-kubernetes-project
