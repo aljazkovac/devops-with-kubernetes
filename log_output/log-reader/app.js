@@ -31,13 +31,26 @@ app.get("/status", async (req, res) => {
   try {
     let output = "";
 
+    // Read information from config file
+    if (fs.existsSync("/config/information.txt")) {
+      const info = fs.readFileSync("/config/information.txt", "utf-8");
+      if (info) {
+        output = info;
+        console.log(`ConfigMap file output: ${info.trim()}`);
+      }
+    }
+
+    // Read message from environment variable
+    const message_env = process.env.MESSAGE_ENV_VARIABLE || "No message set";
+    output += "\n" + `Environment variable message: ${message_env}`;
+
     // Read timestamp logs from log-writer via shared volume
     try {
       if (fs.existsSync(logFile)) {
         const log = fs.readFileSync(logFile, "utf-8");
         if (log) {
-          output = log;
-          console.log(`Log content: ${output.trim()}`);
+          output += "\n" + log;
+          console.log(`Log content: ${log.trim()}`);
         }
       }
     } catch (err) {
@@ -48,9 +61,9 @@ app.get("/status", async (req, res) => {
     const counter = await fetchPingpongCounter();
     if (counter) {
       output += "\n" + counter;
-      console.log(`Combined output: ${output}`);
+      console.log(`Counter output: ${counter.trim()}`);
     }
-
+    console.log("Combined output:\n", output.trim());
     res.type("text/plain").send(output);
   } catch (error) {
     res

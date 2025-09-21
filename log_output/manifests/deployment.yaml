@@ -39,6 +39,14 @@ spec:
           volumeMounts:
             - name: shared-logs
               mountPath: /shared
+            - name: configmap
+              mountPath: /config
+          env:
+            - name: MESSAGE_ENV_VARIABLE
+              valueFrom:
+                configMapKeyRef:
+                  name: logoutput-configmap
+                  key: message
           resources:
             requests:
               cpu: "100m"
@@ -50,3 +58,6 @@ spec:
         - name: shared-logs
           persistentVolumeClaim:
             claimName: shared-data-pvc
+        - name: configmap
+          configMap:
+            name: logoutput-configmap

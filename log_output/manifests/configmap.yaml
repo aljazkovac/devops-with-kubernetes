@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: logoutput-configmap
+  namespace: exercises
+data:
+  information.txt: |
+    file content=this message is from the inlined file
+  message: hello world
