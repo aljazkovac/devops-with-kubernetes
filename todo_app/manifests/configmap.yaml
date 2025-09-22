@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: todoapp-configmap
+  namespace: project
+data:
+  port: "8080"
+  todo_backend_url: "http://todo-backend-svc:3001"
+  image_dir: "./images"
+  current_image_name: "current.jpg"
+  metadata_name: "metadata.json"
+  cache_duration_ms: "600000"
+  picsum_url: "https://picsum.photos/1200"

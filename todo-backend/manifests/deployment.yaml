@@ -21,7 +21,20 @@ spec:
           imagePullPolicy: Always
           env:
             - name: PORT
-              value: "3001"
+              valueFrom:
+                configMapKeyRef:
+                  name: todo-backend-configmap
+                  key: port
+            - name: SERVICE_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: todo-backend-configmap
+                  key: service_name
+            - name: INITIAL_TODO_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: todo-backend-configmap
+                  key: initial_todo_id
           ports:
             # Documents which port the container listens on (not strictly required but best practice)
             - containerPort: 3001
