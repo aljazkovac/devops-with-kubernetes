@@ -6,17 +6,27 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 // Todo backend configuration
-const TODO_BACKEND_URL = process.env.TODO_BACKEND_URL || "http://todo-backend-svc:3001";
+const TODO_BACKEND_URL =
+  process.env.TODO_BACKEND_URL || "http://todo-backend-svc:3001";
 
 // Middleware for parsing form data
 app.use(express.urlencoded({ extended: true }));
 
 // Image storage configuration
-const IMAGE_DIR = "./images";
-const CURRENT_IMAGE_PATH = path.resolve(IMAGE_DIR, "current.jpg");
-const METADATA_PATH = path.resolve(IMAGE_DIR, "metadata.json");
-const CACHE_DURATION = 10 * 60 * 1000; // 10 minutes in milliseconds
-const PICSUM_URL = "https://picsum.photos/1200";
+const IMAGE_DIR_CONFIG = process.env.IMAGE_DIR || "./images";
+const IMAGE_DIR = path.isAbsolute(IMAGE_DIR_CONFIG)
+  ? IMAGE_DIR_CONFIG
+  : path.join(__dirname, IMAGE_DIR_CONFIG);
+const CURRENT_IMAGE_PATH = path.resolve(
+  IMAGE_DIR,
+  process.env.CURRENT_IMAGE_NAME || "current.jpg"
+);
+const METADATA_PATH = path.resolve(
+  IMAGE_DIR,
+  process.env.METADATA_NAME || "metadata.json"
+);
+const CACHE_DURATION = parseInt(process.env.CACHE_DURATION_MS) || 600000; // 10 minutes in milliseconds
+const PICSUM_URL = process.env.PICSUM_URL || "https://picsum.photos/1200";
 
 // Ensure image directory exists
 if (!fs.existsSync(IMAGE_DIR)) {
@@ -112,11 +122,11 @@ app.post("/todos", async (req, res) => {
     if (!todo || todo.trim().length === 0) {
       return res.redirect("/?error=empty");
     }
-    
+
     const response = await axios.post(`${TODO_BACKEND_URL}/todos`, {
-      text: todo.trim()
+      text: todo.trim(),
     });
-    
+
     console.log("Todo created:", response.data.todo);
     res.redirect("/");
   } catch (error) {

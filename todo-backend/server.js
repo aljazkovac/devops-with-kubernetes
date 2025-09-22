@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const app = express();
-const port = process.env.PORT || 3001;
+const port = process.env.PORT || 3000;
 
 // Middleware
 app.use(express.json());
@@ -15,7 +15,7 @@ let todos = [
   { id: 4, text: "Add input validation and character limits", createdAt: new Date().toISOString() },
   { id: 5, text: "Deploy the application to the cluster", createdAt: new Date().toISOString() }
 ];
-let nextId = 6;
+let nextId = parseInt(process.env.INITIAL_TODO_ID) || 6;
 
 // GET /todos - Return all todos from memory
 app.get("/todos", (req, res) => {
@@ -35,7 +35,7 @@ app.post("/todos", (req, res) => {
 
 // Health check endpoint
 app.get("/health", (req, res) => {
-  res.json({ status: "healthy", service: "todo-backend" });
+  res.json({ status: "healthy", service: process.env.SERVICE_NAME || "todo-backend" });
 });
 
 app.listen(port, () => {

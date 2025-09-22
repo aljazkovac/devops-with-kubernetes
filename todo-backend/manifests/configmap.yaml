@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: todo-backend-configmap
+  namespace: project
+data:
+  port: "3001"
+  service_name: "todo-backend"
+  initial_todo_id: "6"
