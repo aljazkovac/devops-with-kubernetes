@@ -1,27 +1,26 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
-  name: pingpong-dep
+  name: postgres-stset
   namespace: exercises
 spec:
+  serviceName: postgres-svc
   replicas: 1
   selector:
     matchLabels:
-      app: pingpong
+      app: postgresapp
   template:
     metadata:
       labels:
-        app: pingpong
+        app: postgresapp
     spec:
       containers:
-        - name: pingpong
-          image: aljazkovac/pingpong:latest
-          imagePullPolicy: Always
+        - name: postgres
+          image: postgres:13
+          ports:
+            - name: postgres
+              containerPort: 5432
           env:
-            - name: POSTGRES_HOST
-              value: "postgres-svc"
-            - name: POSTGRES_PORT
-              value: "5432"
             - name: POSTGRES_DB
               valueFrom:
                 configMapKeyRef:
@@ -37,10 +36,15 @@ spec:
                 configMapKeyRef:
                   name: postgres-secret
                   key: POSTGRES_PASSWORD
-          resources:
-            requests:
-              cpu: "100m"
-              memory: "128Mi"
-            limits:
-              cpu: "250m"
-              memory: "256Mi"
+          volumeMounts:
+            - name: postgres-data-storage
+              mountPath: /var/lib/postgresql/data
+  volumeClaimTemplates:
+    - metadata:
+        name: postgres-data-storage
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: local-path
+        resources:
+          requests:
+            storage: 100Mi
