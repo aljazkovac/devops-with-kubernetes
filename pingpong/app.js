@@ -14,7 +14,6 @@ const dbConfig = {
 
 let client;
 
-// TODO(human) - Implement database connection and error handling logic
 async function connectToDatabase() {
   const maxRetries = 5;
   const retryDelay = 3000; // 3 seconds
@@ -50,7 +49,6 @@ async function connectToDatabase() {
   return false;
 }
 
-// TODO(human) - Implement table initialization
 async function initializeDatabase() {
   try {
     const createTableQuery = `

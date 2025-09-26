@@ -6,4 +6,6 @@ metadata:
 data:
   port: "3001"
   service_name: "todo-backend"
-  initial_todo_id: "6"
+  POSTGRES_DB: ps_db
+  POSTGRES_USER: ps_user
+  POSTGRES_PASSWORD: SecurePassword
