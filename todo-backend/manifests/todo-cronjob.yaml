@@ -1,0 +1,94 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: wikipedia-todo-cronjob
+  namespace: project
+  labels:
+    app: wikipedia-todo
+spec:
+  # Run every hour at minute 0 (e.g., 1:00, 2:00, 3:00, etc.)
+  schedule: "0 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app: wikipedia-todo
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: wikipedia-todo-creator
+              image: curlimages/curl:latest
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  echo "$(date): Starting Wikipedia todo creation..."
+
+                  # === WIKIPEDIA URL FETCHING ===
+                  # Wikipedia's /Special:Random endpoint returns a 302 redirect to a random article
+                  # We use HEAD request (-I) to get only headers, not the full page content
+                  echo "Fetching random Wikipedia article..."
+                  WIKI_URL=$(curl -s -I "https://en.wikipedia.org/wiki/Special:Random" | grep -i "^location:" | sed 's/location: //i' | tr -d '\r\n')
+                  # Command breakdown:
+                  # curl -s -I = Silent HEAD request (headers only, no page content)
+                  # grep -i "^location:" = Find Location header (case insensitive)
+                  # sed 's/location: //i' = Remove "location: " prefix (case insensitive)
+                  # tr -d '\r\n' = Remove carriage returns and newlines
+
+                  # Validate that we got a URL
+                  if [ -z "$WIKI_URL" ]; then
+                      echo "Error: Could not fetch random Wikipedia URL"
+                      exit 1
+                  fi
+
+                  echo "Found Wikipedia article: $WIKI_URL"
+
+                  # === TODO CREATION ===
+                  TODO_TEXT="Read $WIKI_URL"
+
+                  # POST to todo-app service using Kubernetes internal service discovery
+                  # Full DNS name ensures reliable cross-namespace communication
+                  echo "Creating todo: $TODO_TEXT"
+
+                  # Capture both response body AND HTTP status code in one request
+                  RESPONSE=$(curl -s -w "%{http_code}" -X POST "http://todo-app-svc.project.svc.cluster.local:2345/todos" \
+                      -H "Content-Type: application/x-www-form-urlencoded" \
+                      -d "todo=$TODO_TEXT")
+                  # -w "%{http_code}" = Append HTTP status code to response output
+                  # Result: response body + status code (e.g., "Found. Redirecting to /302")
+
+                  # === RESPONSE PARSING USING BASH PARAMETER EXPANSION ===
+                  # Extract last 3 characters (HTTP status code)
+                  HTTP_CODE="${RESPONSE: -3}"
+                  # ${variable: -n} = Get last n characters from end
+
+                  # Extract everything except last 3 characters (response body)
+                  RESPONSE_BODY="${RESPONSE%???}"
+                  # ${variable%pattern} = Remove shortest match of pattern from end
+                  # ??? = Glob pattern matching exactly 3 characters (not regex!)
+
+                  # === SUCCESS VALIDATION ===
+                  # 302 = Redirect after successful form submission (todo-app pattern)
+                  # 200 = Direct success response
+                  if [ "$HTTP_CODE" = "302" ] || [ "$HTTP_CODE" = "200" ]; then
+                      echo "✅ Todo created successfully!"
+                      echo "Response code: $HTTP_CODE"
+                  else
+                      echo "❌ Failed to create todo"
+                      echo "Response code: $HTTP_CODE"
+                      echo "Response body: $RESPONSE_BODY"
+                      exit 1
+                  fi
+
+                  echo "$(date): Wikipedia todo creation completed"
+              resources:
+                requests:
+                  cpu: "50m"
+                  memory: "64Mi"
+                limits:
+                  cpu: "100m"
+                  memory: "128Mi"
+  # Keep last 3 successful jobs and 1 failed job for debugging
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1
