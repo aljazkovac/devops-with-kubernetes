@@ -90,6 +90,14 @@ app.post("/todos", async (req, res) => {
     return res.status(400).json({ error: "Valid text is required" });
   }
 
+  // Check 140 character limit
+  if (text.length > 140) {
+    console.error(`Todo rejected: text too long (${text.length} characters, max 140)`);
+    return res.status(400).json({ error: "Todo must be 140 characters or less" });
+  }
+
+  console.log(`Todo created: "${text.substring(0, 50)}${text.length > 50 ? '...' : ''}"`);
+
   try {
     const result = await client.query(
       "INSERT INTO todos (text) VALUES ($1) RETURNING *",

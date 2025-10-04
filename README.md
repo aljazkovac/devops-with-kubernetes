@@ -24,3 +24,11 @@ Course [DevOps with Kubernetes](https://courses.mooc.fi/org/uh-cs/courses/devops
 
 - [2.1](https://github.com/aljazkovac/devops-with-kubernetes/tree/2.1) - Connect Log Output and Ping Pong Applications with HTTP
 - [2.2](https://github.com/aljazkovac/devops-with-kubernetes/tree/2.2) - Create a Todo Backend Service
+- [2.3](https://github.com/aljazkovac/devops-with-kubernetes/tree/2.3) - Separate namepaces
+- [2.4](https://github.com/aljazkovac/devops-with-kubernetes/tree/2.4) - Separate namespaces
+- [2.5](https://github.com/aljazkovac/devops-with-kubernetes/tree/2.5/log_output) - ConfigMaps
+- [2.6](https://github.com/aljazkovac/devops-with-kubernetes/tree/2.6) - Env variables
+- [2.7](https://github.com/aljazkovac/devops-with-kubernetes/tree/2.7/pingpong) - Run a postgres database as a stateful set
+- [2.8](https://github.com/aljazkovac/devops-with-kubernetes/tree/2.8) - Postgres database with ConfigMaps
+- [2.9](https://github.com/aljazkovac/devops-with-kubernetes/tree/2.9/todo-backend) - CronJobs
+- [2.10](https://github.com/aljazkovac/devops-with-kubernetes/tree/2.10) - Set up monitoring
