@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: pingpong
-          image: aljazkovac/pingpong:latest
+          image: aljazkovac/pingpong:v2
           imagePullPolicy: Always
           env:
             - name: POSTGRES_HOST
@@ -40,7 +40,7 @@ spec:
           resources:
             requests:
               cpu: "100m"
-              memory: "128Mi"
+              memory: "32Mi"
             limits:
-              cpu: "250m"
-              memory: "256Mi"
+              cpu: "200m"
+              memory: "64Mi"
