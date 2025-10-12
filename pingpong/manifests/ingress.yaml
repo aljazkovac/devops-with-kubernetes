@@ -1,0 +1,30 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: pingpong-ingress
+  namespace: exercises
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: pingpong-svc
+                port:
+                  name: http
+          - path: /pingpong
+            pathType: Prefix
+            backend:
+              service:
+                name: pingpong-svc
+                port:
+                  name: http
+          - path: /counter
+            pathType: Prefix
+            backend:
+              service:
+                name: pingpong-svc
+                port:
+                  name: http
