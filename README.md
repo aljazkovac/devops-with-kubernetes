@@ -32,3 +32,5 @@ Course [DevOps with Kubernetes](https://courses.mooc.fi/org/uh-cs/courses/devops
 - [2.8](https://github.com/aljazkovac/devops-with-kubernetes/tree/2.8) - Postgres database with ConfigMaps
 - [2.9](https://github.com/aljazkovac/devops-with-kubernetes/tree/2.9/todo-backend) - CronJobs
 - [2.10](https://github.com/aljazkovac/devops-with-kubernetes/tree/2.10) - Set up monitoring
+- [3.1](https://github.com/aljazkovac/devops-with-kubernetes/tree/3.1/pingpong) - Deploy pingpong app to GKE
+- [3.2](https://github.com/aljazkovac/devops-with-kubernetes/tree/3.2) - Deploy log-output and pingpong to GKE and expose via ingress

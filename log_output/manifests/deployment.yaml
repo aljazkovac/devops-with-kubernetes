@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: log-writer
-          image: aljazkovac/log-writer:latest
+          image: aljazkovac/log-writer:v2
           imagePullPolicy: Always
           ports:
             - containerPort: 3001
@@ -27,12 +27,12 @@ spec:
           resources:
             requests:
               cpu: "100m"
-              memory: "128Mi"
+              memory: "16Mi"
             limits:
-              cpu: "250m"
-              memory: "256Mi"
+              cpu: "200m"
+              memory: "128Mi"
         - name: log-reader
-          image: aljazkovac/log-reader:latest
+          image: aljazkovac/log-reader:v3
           imagePullPolicy: Always
           ports:
             - containerPort: 3000
@@ -50,10 +50,10 @@ spec:
           resources:
             requests:
               cpu: "100m"
-              memory: "128Mi"
+              memory: "16Mi"
             limits:
-              cpu: "250m"
-              memory: "256Mi"
+              cpu: "200m"
+              memory: "128Mi"
       volumes:
         - name: shared-logs
           persistentVolumeClaim:

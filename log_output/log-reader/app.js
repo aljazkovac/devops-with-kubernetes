@@ -23,7 +23,7 @@ const fetchPingpongCounter = async () => {
 
 // Root route - redirects to status endpoint for user convenience
 app.get("/", (req, res) => {
-  res.redirect("/status");
+  res.status(200).send("Log reader service is healthy");
 });
 
 // Status endpoint - combines log-writer output with HTTP-fetched counter
