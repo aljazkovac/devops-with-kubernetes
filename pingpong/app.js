@@ -99,14 +99,6 @@ async function getCounter() {
 
 app.get("/", async (req, res) => {
   try {
-    res.status(200).send("Ping-pong application is healthy");
-  } catch (error) {
-    res.status(500).send("Ping-pong application is not healthy");
-  }
-});
-
-app.get("/pingpong", async (req, res) => {
-  try {
     const counter = await incrementCounter();
     res.send(`pong ${counter}`);
     console.log(`Ping-pong count: ${counter}`);

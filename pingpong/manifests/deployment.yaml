@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: pingpong
-          image: aljazkovac/pingpong:v3
+          image: aljazkovac/pingpong:rewrite
           imagePullPolicy: Always
           env:
             - name: POSTGRES_HOST
