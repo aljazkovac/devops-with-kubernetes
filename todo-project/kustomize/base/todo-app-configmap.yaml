@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: todoapp-configmap
+  name: todo-app-configmap
   namespace: project
 data:
   port: "8080"

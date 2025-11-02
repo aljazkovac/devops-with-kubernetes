@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: todo-app
+  name: todo-app-deployment
   namespace: project
   labels:
     app: todo-app
@@ -23,37 +23,37 @@ spec:
             - name: PORT
               valueFrom:
                 configMapKeyRef:
-                  name: todoapp-configmap
+                  name: todo-app-configmap
                   key: port
             - name: TODO_BACKEND_URL
               valueFrom:
                 configMapKeyRef:
-                  name: todoapp-configmap
+                  name: todo-app-configmap
                   key: todo_backend_url
             - name: IMAGE_DIR
               valueFrom:
                 configMapKeyRef:
-                  name: todoapp-configmap
+                  name: todo-app-configmap
                   key: image_dir
             - name: CURRENT_IMAGE_NAME
               valueFrom:
                 configMapKeyRef:
-                  name: todoapp-configmap
+                  name: todo-app-configmap
                   key: current_image_name
             - name: METADATA_NAME
               valueFrom:
                 configMapKeyRef:
-                  name: todoapp-configmap
+                  name: todo-app-configmap
                   key: metadata_name
             - name: CACHE_DURATION_MS
               valueFrom:
                 configMapKeyRef:
-                  name: todoapp-configmap
+                  name: todo-app-configmap
                   key: cache_duration_ms
             - name: PICSUM_URL
               valueFrom:
                 configMapKeyRef:
-                  name: todoapp-configmap
+                  name: todo-app-configmap
                   key: picsum_url
           resources:
             requests:
@@ -63,9 +63,9 @@ spec:
               cpu: "250m"
               memory: "256Mi"
           volumeMounts:
-            - name: image-storage
+            - name: todo-app-storage
               mountPath: /app/images
       volumes:
-        - name: image-storage
+        - name: todo-app-storage
           persistentVolumeClaim:
-            claimName: image-storage-pvc
+            claimName: todo-app-pvc

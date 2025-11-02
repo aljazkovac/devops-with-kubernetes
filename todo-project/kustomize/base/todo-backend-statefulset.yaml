@@ -1,10 +1,10 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: postgres-stset
+  name: todo-backend-postgres-stset
   namespace: project
 spec:
-  serviceName: postgres-svc
+  serviceName: todo-backend-postgres-svc
   replicas: 1
   selector:
     matchLabels:
@@ -37,14 +37,14 @@ spec:
                   name: todo-backend-configmap
                   key: POSTGRES_PASSWORD
           volumeMounts:
-            - name: postgres-data-storage
+            - name: todo-backend-postgres-data-storage
               mountPath: /var/lib/postgresql/data
+              subPath: postgres
   volumeClaimTemplates:
     - metadata:
-        name: postgres-data-storage
+        name: todo-backend-postgres-data-storage
       spec:
         accessModes: ["ReadWriteOnce"]
-        storageClassName: local-path
         resources:
           requests:
             storage: 100Mi

@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: postgres-svc
+  name: todo-backend-postgres-svc
   namespace: project
   labels:
     app: postgres
