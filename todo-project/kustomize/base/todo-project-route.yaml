@@ -14,10 +14,4 @@ spec:
       backendRefs:
         - name: todo-app-svc
           port: 2345
-    - matches:
-        - path:
-            type: PathPrefix
-            value: /api/todos
-      backendRefs:
-        - name: todo-backend-svc
-          port: 3001
+
