@@ -13,3 +13,8 @@ resources:
   - todo-backend-todo-cronjob.yaml
   - todo-project-gateway.yaml
   - todo-project-route.yaml
+images:
+  - name: todo-app/image
+    newName: aljazkovac/todo-app:v2
+  - name: todo-backend/image
+    newName: aljazkovac/todo-backend:v2

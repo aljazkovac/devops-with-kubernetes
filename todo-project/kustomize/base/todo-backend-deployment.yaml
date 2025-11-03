@@ -17,19 +17,24 @@ spec:
     spec:
       containers:
         - name: todo-backend
-          image: aljazkovac/todo-backend:latest
+          image: todo-backend/image
           imagePullPolicy: Always
           env:
             - name: PORT
               valueFrom:
                 configMapKeyRef:
                   name: todo-backend-configmap
-                  key: port
+                  key: PORT
             - name: SERVICE_NAME
               valueFrom:
                 configMapKeyRef:
                   name: todo-backend-configmap
-                  key: service_name
+                  key: SERVICE_NAME
+            - name: POSTGRES_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: todo-backend-configmap
+                  key: POSTGRES_HOST
           ports:
             # Documents which port the container listens on (not strictly required but best practice)
             - containerPort: 3001
