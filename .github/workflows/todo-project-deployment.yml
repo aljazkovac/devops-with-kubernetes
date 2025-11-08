@@ -63,10 +63,14 @@ jobs:
             - name: Deploy
               working-directory: ./todo-project/kustomize/base # Set working directory for this step
               run: |-
+                  NAMESPACE=${GITHUB_REF#refs/heads/}
+                  kubectl create namespace $NAMESPACE || true
+                  kubectl config set-context --current --namespace=$NAMESPACE
+                  kustomize edit set namespace $NAMESPACE
                   kustomize edit set image todo-app/image=$FRONTEND_IMAGE_TAG
                   kustomize edit set image todo-backend/image=$BACKEND_IMAGE_TAG
                   kustomize build . | kubectl apply -f -
-                  kubectl rollout status deployment/todo-app-deployment -n project
-                  kubectl rollout status deployment/todo-backend-deployment -n project
-                  kubectl rollout status statefulset/todo-backend-postgres-stset -n project
-                  kubectl get services -o wide -n project
+                  kubectl rollout status deployment/todo-app-deployment -n $NAMESPACE
+                  kubectl rollout status deployment/todo-backend-deployment -n $NAMESPACE
+                  kubectl rollout status statefulset/todo-backend-postgres-stset -n $NAMESPACE
+                  kubectl get services -o wide -n $NAMESPACE
