@@ -52,7 +52,7 @@ spec:
                   echo "Creating todo: $TODO_TEXT"
 
                   # Capture both response body AND HTTP status code in one request
-                  RESPONSE=$(curl -s -w "%{http_code}" -X POST "http://todo-app-svc.project.svc.cluster.local:2345/todos" \
+                  RESPONSE=$(curl -s -w "%{http_code}" -X POST "http://todo-app-svc:2345/todos" \
                       -H "Content-Type: application/x-www-form-urlencoded" \
                       -d "todo=$TODO_TEXT")
                   # -w "%{http_code}" = Append HTTP status code to response output
