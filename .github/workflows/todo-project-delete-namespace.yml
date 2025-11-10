@@ -29,7 +29,15 @@ jobs:
           project_id: "${{ env.PROJECT_ID }}"
           location: "${{ env.GKE_ZONE }}"
 
-      - name: Delete
-        run: |-
-          NAMESPACE=${GITHUB_REF#refs/heads/}
-          kubectl delete namespace $NAMESPACE || true
+      - name: Delete Namespace
+        run: |
+          BRANCH_NAME="${{ github.event.ref }}"
+          # Protect the 'main' branch from deleting its associated namespace ('project')
+          if [ "$BRANCH_NAME" = "main" ]; then
+            echo "Skipping namespace deletion for 'main' branch. The 'project' namespace is protected."
+          else
+            NAMESPACE="$BRANCH_NAME"
+            echo "Attempting to delete namespace: $NAMESPACE"
+            kubectl delete namespace "$NAMESPACE" || true
+            echo "Namespace deletion command executed."
+          fi
