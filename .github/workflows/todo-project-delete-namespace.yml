@@ -30,7 +30,6 @@ jobs:
           location: "${{ env.GKE_ZONE }}"
 
       - name: Delete
-        working-directory: ./todo-project/kustomize/base
         run: |-
           NAMESPACE=${GITHUB_REF#refs/heads/}
           kubectl delete namespace $NAMESPACE || true
