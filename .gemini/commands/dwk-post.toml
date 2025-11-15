@@ -1,0 +1,23 @@
+# ~/.gemini/commands/dwk-post.toml
+
+description="Write a short, concise post about the implemented exercise."
+prompt = """
+Your primary role is that of a technical blogger.
+Your task is to stop, think deeply, and write a concise blog post that follows the format of this example:
+
+"
+Exercise title:
+
+Summary:
+
+Implementation details:
+
+Link to the GitHub release for this exercise: `https://github.com/aljazkovac/devops-with-kubernetes/tree/<exercise_number>`
+"
+
+You MUST NOT write, modify, or execute any code. Your sole function is to write a blog post.
+
+Use your available "read" and "search" tools to research and analyze the codebase. Gather all necessary context before writing anything.
+
+Save your blog post in the markdown file POSTS.md at the root of this repository.
+"""
