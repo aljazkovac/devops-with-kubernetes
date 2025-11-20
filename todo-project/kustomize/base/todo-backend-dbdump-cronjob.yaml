@@ -1,0 +1,79 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: todo-backend-db-backup-cronjob
+  namespace: project
+  labels:
+    app: db-backup
+spec:
+  # Run every 24 hours at 21.00
+  schedule: "0 21 * * *"
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app: db-backup
+        spec:
+          restartPolicy: OnFailure
+          nodeSelector:
+            cloud.google.com/gke-nodepool: backup-pool
+          containers:
+            - name: db-backup-creator
+              image: google/cloud-sdk:latest
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  set -e
+                  echo "Installing PostgreSQL client..."
+                  apt-get update -y && apt-get install -y postgresql-client
+
+                  BACKUP_FILENAME="backup-$(date +'%Y-%m-%dT%H:%M:%SZ').sql"
+                  GCS_BUCKET_PATH="gs://dwk-ak-project-backup-bucket/$BACKUP_FILENAME"
+
+                  echo "Dumping database to $BACKUP_FILENAME..."
+                  pg_dump -v > "/tmp/$BACKUP_FILENAME"
+
+                  echo "Uploading backup to $GCS_BUCKET_PATH..."
+                  gsutil cp "/tmp/$BACKUP_FILENAME" "$GCS_BUCKET_PATH"
+
+                  echo "Backup complete."
+              env:
+                - name: PGHOST
+                  value: "todo-backend-postgres-svc"
+                - name: PGUSER
+                  valueFrom:
+                    configMapKeyRef:
+                      name: todo-backend-configmap
+                      key: POSTGRES_USER
+                - name: PGDATABASE
+                  valueFrom:
+                    configMapKeyRef:
+                      name: todo-backend-configmap
+                      key: POSTGRES_DB
+                - name: PGPASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: todo-backend-postgres-credentials
+                      key: POSTGRES_PASSWORD
+                - name: GOOGLE_APPLICATION_CREDENTIALS
+                  value: /secrets/gcs/key.json
+              resources:
+                requests:
+                  cpu: "100m"
+                  memory: "256Mi"
+                limits:
+                  cpu: "200m"
+                  memory: "512Mi"
+              volumeMounts:
+                - name: gcs-secret-volume
+                  mountPath: /secrets/gcs
+                  readOnly: true
+          volumes:
+            - name: gcs-secret-volume
+              secret:
+                secretName: gcs-credentials
+  # Keep last 3 successful jobs and 1 failed job for debugging
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1

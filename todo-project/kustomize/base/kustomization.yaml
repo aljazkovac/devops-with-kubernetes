@@ -11,6 +11,7 @@ resources:
   - todo-backend-statefulset.yaml
   - todo-backend-svc.yaml
   - todo-backend-todo-cronjob.yaml
+  - todo-backend-dbdump-cronjob.yaml
   - todo-project-gateway.yaml
   - todo-project-route.yaml
 images:

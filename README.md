@@ -44,6 +44,7 @@ Course [DevOps with Kubernetes](https://courses.mooc.fi/org/uh-cs/courses/devops
 - [3.7](https://github.com/aljazkovac/devops-with-kubernetes/tree/3.7) - Improve the deployment workflow with separate namespace per environment
 - [3.8](https://github.com/aljazkovac/devops-with-kubernetes/tree/3.8) - Deleting a branch deletes an environment
 - [3.9](https://github.com/aljazkovac/devops-with-kubernetes/tree/3.9) - DBaaS vs. DIY
+- [3.10](https://github.com/aljazkovac/devops-with-kubernetes/tree/3.10) - Backup database to Google Cloud
 
 ---
 
