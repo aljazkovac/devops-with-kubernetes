@@ -14,6 +14,8 @@ resources:
   - todo-backend-dbdump-cronjob.yaml
   - todo-project-gateway.yaml
   - todo-project-route.yaml
+  - todo-project-quota.yaml
+  - todo-project-limitrange.yaml
 images:
   - name: todo-app/image
     newName: aljazkovac/todo-app:v2

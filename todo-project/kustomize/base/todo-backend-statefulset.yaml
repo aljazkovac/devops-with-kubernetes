@@ -40,6 +40,13 @@ spec:
             - name: todo-backend-postgres-data-storage
               mountPath: /var/lib/postgresql/data
               subPath: postgres
+          resources:
+            requests:
+              cpu: "200m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
   volumeClaimTemplates:
     - metadata:
         name: todo-backend-postgres-data-storage
