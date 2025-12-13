@@ -116,20 +116,31 @@ app.get("/counter", async (req, res) => {
   }
 });
 
+app.get("/healthz", async (req, res) => {
+  try {
+    await client.query("SELECT 1");
+    return res.status(200).send("OK");
+  } catch (error) {
+    return res.status(500).send("Database connection error");
+  }
+});
+
 // Initialize database connection and start server
 async function startApp() {
-  console.log("Connecting to PostgreSQL...");
+  app.listen(PORT, () => {
+    console.log(`Ping-pong application listening on port ${PORT}`);
+  });
 
-  if (await connectToDatabase()) {
-    await initializeDatabase();
-    console.log("Database initialized successfully");
-
-    app.listen(PORT, () => {
-      console.log(`Ping-pong application listening on port ${PORT}`);
-    });
-  } else {
-    console.error("Failed to connect to database. Exiting...");
-    process.exit(1);
+  while (true) {
+    console.log("Attempting to connect to PostgreSQL...");
+    // connectToDatabase already attempts 5 retries internally
+    if (await connectToDatabase()) {
+      await initializeDatabase();
+      console.log("Database initialized successfully");
+      break; // Exit the loop once connected and initialized
+    }
+    console.error("Failed to establish database connection. Retrying in 5 seconds...");
+    await new Promise(resolve => setTimeout(resolve, 5000));
   }
 }
 

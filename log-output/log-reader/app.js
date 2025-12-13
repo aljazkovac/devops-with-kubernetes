@@ -26,6 +26,15 @@ app.get("/", (req, res) => {
   res.status(200).send("Log reader service is healthy");
 });
 
+app.get("/healthz", async (req, res) => {
+  try {
+    await fetch(PINGPONG_SERVICE_URL);
+    return res.status(200).send("OK");
+  } catch (error) {
+    return res.status(500).send("Pingpong service unreachable");
+  }
+});
+
 // Status endpoint - combines log-writer output with HTTP-fetched counter
 app.get("/status", async (req, res) => {
   try {

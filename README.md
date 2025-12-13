@@ -105,3 +105,7 @@ Below is a comparison of the two approaches to help understand the trade-offs.
 - For the **context of this educational repository**, the **self-managed approach is the correct and more valuable choice**. It forces you to engage with and solve the challenges of running stateful applications on Kubernetes. By setting up `StatefulSets`, managing `PersistentVolumes`, and thinking about backup strategies, you gain a much deeper understanding of the platform's capabilities and limitations.
 
 ---
+
+### Chapter 5: GitOps and Friends
+
+- [4.1](https://github.com/aljazkovac/devops-with-kubernetes/tree/4.1) - Readiness probes

@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: pingpong
-          image: aljazkovac/pingpong:rewrite
+          image: aljazkovac/pingpong:v41
           imagePullPolicy: Always
           env:
             - name: POSTGRES_HOST
@@ -44,3 +44,9 @@ spec:
             limits:
               cpu: "200m"
               memory: "128Mi"
+          readinessProbe:
+            initialDelaySeconds: 10 # Initial delay until the readiness is tested
+            periodSeconds: 5 # How often to test
+            httpGet:
+              path: /healthz
+              port: 9000

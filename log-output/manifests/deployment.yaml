@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: log-writer
-          image: aljazkovac/log-writer:v2
+          image: aljazkovac/log-writer:v41
           imagePullPolicy: Always
           ports:
             - containerPort: 3001
@@ -32,7 +32,7 @@ spec:
               cpu: "200m"
               memory: "128Mi"
         - name: log-reader
-          image: aljazkovac/log-reader:v3
+          image: aljazkovac/log-reader:v41
           imagePullPolicy: Always
           ports:
             - containerPort: 3000
@@ -54,6 +54,12 @@ spec:
             limits:
               cpu: "200m"
               memory: "128Mi"
+          readinessProbe:
+            initialDelaySeconds: 10 # Initial delay until the readiness is tested
+            periodSeconds: 5 # How often to test
+            httpGet:
+              path: /healthz
+              port: 3000
       volumes:
         - name: shared-logs
           persistentVolumeClaim:
