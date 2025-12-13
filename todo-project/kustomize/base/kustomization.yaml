@@ -18,6 +18,6 @@ resources:
   - todo-project-limitrange.yaml
 images:
   - name: todo-app/image
-    newName: aljazkovac/todo-app:v2
+    newName: aljazkovac/todo-app:v42
   - name: todo-backend/image
-    newName: aljazkovac/todo-backend:v2
+    newName: aljazkovac/todo-backend:v42

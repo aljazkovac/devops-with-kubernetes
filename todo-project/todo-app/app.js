@@ -161,6 +161,16 @@ app.get("/", async (req, res) => {
   }
 });
 
+app.get("/healthz", async (req, res) => {
+  try {
+    await axios.get(`${TODO_BACKEND_URL}/healthz`);
+    res.status(200).send("OK");
+  } catch (error) {
+    console.error("Health check failed:", error.message);
+    res.status(500).send("Health check failed");
+  }
+});
+
 // Serve static files AFTER route handlers to prevent index.html from being served automatically
 app.use(express.static(path.join(__dirname, "public")));
 

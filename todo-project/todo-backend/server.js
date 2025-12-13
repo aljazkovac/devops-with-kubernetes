@@ -92,11 +92,17 @@ app.post("/todos", async (req, res) => {
 
   // Check 140 character limit
   if (text.length > 140) {
-    console.error(`Todo rejected: text too long (${text.length} characters, max 140)`);
-    return res.status(400).json({ error: "Todo must be 140 characters or less" });
+    console.error(
+      `Todo rejected: text too long (${text.length} characters, max 140)`
+    );
+    return res
+      .status(400)
+      .json({ error: "Todo must be 140 characters or less" });
   }
 
-  console.log(`Todo created: "${text.substring(0, 50)}${text.length > 50 ? '...' : ''}"`);
+  console.log(
+    `Todo created: "${text.substring(0, 50)}${text.length > 50 ? "..." : ""}"`
+  );
 
   try {
     const result = await client.query(
@@ -116,6 +122,16 @@ app.get("/health", (req, res) => {
     status: "healthy",
     service: process.env.SERVICE_NAME || "todo-backend",
   });
+});
+
+app.get("/healthz", async (req, res) => {
+  try {
+    await client.query("SELECT 1");
+    res.status(200).send("OK");
+  } catch (error) {
+    console.error("Health check failed:", error);
+    res.status(500).send("Health check failed");
+  }
 });
 
 async function startServer() {

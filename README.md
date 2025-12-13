@@ -108,4 +108,5 @@ Below is a comparison of the two approaches to help understand the trade-offs.
 
 ### Chapter 5: GitOps and Friends
 
-- [4.1](https://github.com/aljazkovac/devops-with-kubernetes/tree/4.1) - Readiness probes
+- [4.1](https://github.com/aljazkovac/devops-with-kubernetes/tree/4.1) - Readines probes
+- [4.2](https://github.com/aljazkovac/devops-with-kubernetes/tree/4.2) - Health probes on the project
