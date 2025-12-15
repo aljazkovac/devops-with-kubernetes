@@ -110,3 +110,12 @@ Below is a comparison of the two approaches to help understand the trade-offs.
 
 - [4.1](https://github.com/aljazkovac/devops-with-kubernetes/tree/4.1) - Readines probes
 - [4.2](https://github.com/aljazkovac/devops-with-kubernetes/tree/4.2) - Health probes on the project
+- [4.3](https://github.com/aljazkovac/devops-with-kubernetes/tree/4.3) - Prometheus query
+
+---
+
+#### Exercise 4.3: Prometheus
+
+The query: `sum(kube_pod_info{namespace="prometheus", created_by_kind="StatefulSet"})`
+
+---
