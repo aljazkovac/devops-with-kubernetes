@@ -1,5 +1,5 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
 metadata:
   name: pingpong-dep
   namespace: exercises
@@ -8,6 +8,18 @@ spec:
   selector:
     matchLabels:
       app: pingpong
+  strategy:
+    canary:
+      steps:
+        - setWeight: 25
+        - pause:
+            duration: 30s
+        - setWeight: 50
+        - pause:
+            duration: 30s
+        - analysis:
+            templates:
+              - templateName: cpu-usage
   template:
     metadata:
       labels:
@@ -15,7 +27,7 @@ spec:
     spec:
       containers:
         - name: pingpong
-          image: aljazkovac/pingpong:v41
+          image: aljazkovac/pingpong:v442
           imagePullPolicy: Always
           env:
             - name: POSTGRES_HOST
@@ -46,6 +58,12 @@ spec:
               memory: "128Mi"
           readinessProbe:
             initialDelaySeconds: 10 # Initial delay until the readiness is tested
+            periodSeconds: 5 # How often to test
+            httpGet:
+              path: /healthz
+              port: 9000
+          livenessProbe:
+            initialDelaySeconds: 20 # Initial delay until the liveness is tested
             periodSeconds: 5 # How often to test
             httpGet:
               path: /healthz
