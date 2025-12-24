@@ -11,6 +11,7 @@ const TODO_BACKEND_URL =
 
 // Middleware for parsing form data
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 // Image storage configuration
 const IMAGE_DIR_CONFIG = process.env.IMAGE_DIR || "./images";
@@ -132,6 +133,18 @@ app.post("/todos", async (req, res) => {
   } catch (error) {
     console.error("Error creating todo:", error.message);
     res.redirect("/?error=failed");
+  }
+});
+
+app.put("/todos/:id", async (req, res) => {
+  const { id } = req.params;
+  const { done } = req.body;
+  try {
+    await axios.put(`${TODO_BACKEND_URL}/todos/${id}`, { done });
+    res.status(200).send();
+  } catch (error) {
+    console.error("Error updating todo:", error.message);
+    res.status(500).send("Error updating todo");
   }
 });
 

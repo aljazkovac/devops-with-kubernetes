@@ -112,6 +112,7 @@ Below is a comparison of the two approaches to help understand the trade-offs.
 - [4.2](https://github.com/aljazkovac/devops-with-kubernetes/tree/4.2) - Health probes on the project
 - [4.3](https://github.com/aljazkovac/devops-with-kubernetes/tree/4.3) - Prometheus query
 - [4.4](https://github.com/aljazkovac/devops-with-kubernetes/tree/4.4) - Canary release
+- [4.5](https://github.com/aljazkovac/devops-with-kubernetes/tree/4.5) - TODOs Mark as Done
 
 ---
 

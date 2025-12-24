@@ -59,11 +59,25 @@ async function initializeDatabase() {
       CREATE TABLE IF NOT EXISTS todos (
         id SERIAL PRIMARY KEY,
         text VARCHAR(255) NOT NULL,
+        done BOOLEAN DEFAULT FALSE,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
     `;
 
     await client.query(createTableQuery);
+    
+    // Check if 'done' column exists, if not add it (simple migration)
+    const checkColumnQuery = `
+      SELECT column_name 
+      FROM information_schema.columns 
+      WHERE table_name='todos' AND column_name='done';
+    `;
+    const result = await client.query(checkColumnQuery);
+    if (result.rowCount === 0) {
+       await client.query("ALTER TABLE todos ADD COLUMN done BOOLEAN DEFAULT FALSE;");
+       console.log("Added 'done' column to todos table");
+    }
+
     console.log("Database tables initialized");
   } catch (error) {
     console.error("Error initializing database:", error);
@@ -112,6 +126,26 @@ app.post("/todos", async (req, res) => {
     res.status(201).json({ todo: result.rows[0] });
   } catch (error) {
     console.error("Error creating todo:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+app.put("/todos/:id", async (req, res) => {
+  const { id } = req.params;
+  const { done } = req.body;
+
+  try {
+    const result = await client.query(
+      "UPDATE todos SET done = $1 WHERE id = $2 RETURNING *",
+      [done, id]
+    );
+    if (result.rowCount === 0) {
+      res.status(404).json({ error: "Todo not found" });
+    } else {
+      res.json({ todo: result.rows[0] });
+    }
+  } catch (error) {
+    console.error("Error updating todo:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 });

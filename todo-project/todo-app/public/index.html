@@ -136,9 +136,16 @@
         </form>
 
         <div class="todo-list">
-          <h3>Your TODOs:</h3>
+          <h3>Todo</h3>
           <ul id="todo-items">
             <!-- Todos will be loaded dynamically -->
+          </ul>
+        </div>
+        
+        <div class="done-list">
+          <h3>Done</h3>
+          <ul id="done-items">
+             <!-- Done todos will be loaded dynamically -->
           </ul>
         </div>
       </div>
@@ -169,6 +176,25 @@
         }
       });
 
+      async function markAsDone(id) {
+        try {
+          const response = await fetch(`/todos/${id}`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ done: true }),
+          });
+          if (response.ok) {
+            loadTodos();
+          } else {
+            console.error("Failed to update todo");
+          }
+        } catch (error) {
+          console.error("Error updating todo:", error);
+        }
+      }
+
       // CLIENT-SIDE RENDERING: Dynamically load todos after page loads
       // This calls our /api/todos endpoint which acts as a proxy to todo-backend microservice
       async function loadTodos() {
@@ -176,14 +202,26 @@
           const response = await fetch("/api/todos");
           const data = await response.json();
           const todoList = document.getElementById("todo-items");
+          const doneList = document.getElementById("done-items");
 
           todoList.innerHTML = "";
+          doneList.innerHTML = "";
 
           if (data.todos && data.todos.length > 0) {
             data.todos.forEach((todo) => {
               const li = document.createElement("li");
-              li.textContent = todo.text;
-              todoList.appendChild(li);
+              li.textContent = todo.text + " ";
+              
+              if (todo.done) {
+                 doneList.appendChild(li);
+              } else {
+                 const button = document.createElement("button");
+                 button.textContent = "Mark as done";
+                 button.style.marginLeft = "10px";
+                 button.onclick = () => markAsDone(todo.id);
+                 li.appendChild(button);
+                 todoList.appendChild(li);
+              }
             });
           } else {
             const li = document.createElement("li");
