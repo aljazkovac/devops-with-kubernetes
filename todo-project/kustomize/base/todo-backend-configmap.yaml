@@ -10,3 +10,4 @@ data:
   POSTGRES_DB: ps_db
   POSTGRES_USER: ps_user
   POSTGRES_PASSWORD: SecurePassword
+  NATS_URL: nats://my-nats.project.svc.cluster.local:4222

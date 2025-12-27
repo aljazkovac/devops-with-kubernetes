@@ -3,6 +3,8 @@ const cors = require("cors");
 const { Client } = require("pg");
 const app = express();
 const port = process.env.PORT || 3000;
+const { connect, StringCodec } = require("nats");
+const natsUrl = process.env.NATS_URL || "nats://localhost:4222";
 
 // Middleware
 app.use(express.json());
@@ -17,6 +19,7 @@ const dbConfig = {
 };
 
 let client;
+let nc;
 
 async function connectToDatabase() {
   const maxRetries = 5;
@@ -65,7 +68,7 @@ async function initializeDatabase() {
     `;
 
     await client.query(createTableQuery);
-    
+
     // Check if 'done' column exists, if not add it (simple migration)
     const checkColumnQuery = `
       SELECT column_name 
@@ -74,8 +77,10 @@ async function initializeDatabase() {
     `;
     const result = await client.query(checkColumnQuery);
     if (result.rowCount === 0) {
-       await client.query("ALTER TABLE todos ADD COLUMN done BOOLEAN DEFAULT FALSE;");
-       console.log("Added 'done' column to todos table");
+      await client.query(
+        "ALTER TABLE todos ADD COLUMN done BOOLEAN DEFAULT FALSE;"
+      );
+      console.log("Added 'done' column to todos table");
     }
 
     console.log("Database tables initialized");
@@ -114,16 +119,23 @@ app.post("/todos", async (req, res) => {
       .json({ error: "Todo must be 140 characters or less" });
   }
 
-  console.log(
-    `Todo created: "${text.substring(0, 50)}${text.length > 50 ? "..." : ""}"`
-  );
-
   try {
     const result = await client.query(
       "INSERT INTO todos (text) VALUES ($1) RETURNING *",
       [text]
     );
     res.status(201).json({ todo: result.rows[0] });
+    console.log(
+      `Todo created: "${text.substring(0, 50)}${text.length > 50 ? "..." : ""}"`
+    );
+    if (nc) {
+      const sc = StringCodec();
+      const event = {
+        user: "bot",
+        message: `A todo was created: ${text}`,
+      };
+      nc.publish("todo_status", sc.encode(JSON.stringify(event)));
+    }
   } catch (error) {
     console.error("Error creating todo:", error);
     res.status(500).json({ error: "Internal server error" });
@@ -143,6 +155,14 @@ app.put("/todos/:id", async (req, res) => {
       res.status(404).json({ error: "Todo not found" });
     } else {
       res.json({ todo: result.rows[0] });
+      if (nc) {
+        const sc = StringCodec();
+        const event = {
+          user: "bot",
+          message: `A todo was updated: ${done}`,
+        };
+        nc.publish("todo_status", sc.encode(JSON.stringify(event)));
+      }
     }
   } catch (error) {
     console.error("Error updating todo:", error);
@@ -174,6 +194,13 @@ async function startServer() {
   if (await connectToDatabase()) {
     await initializeDatabase();
     console.log("Database initialized successfully");
+
+    try {
+      nc = await connect({ servers: natsUrl });
+      console.log("Connected to NATS server");
+    } catch (error) {
+      console.error("Failed to connect to NATS server:", error);
+    }
 
     app.listen(port, () => {
       console.log(`Todo backend server started on port ${port}`);

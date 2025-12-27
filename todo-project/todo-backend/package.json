@@ -8,11 +8,17 @@
     "dev": "node server.js"
   },
   "dependencies": {
-    "express": "^4.18.2",
     "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "nats": "^2.29.3",
     "pg": "^8.11.3"
   },
-  "keywords": ["kubernetes", "microservices", "todo", "api"],
+  "keywords": [
+    "kubernetes",
+    "microservices",
+    "todo",
+    "api"
+  ],
   "author": "",
   "license": "MIT"
 }
