@@ -16,5 +16,5 @@ spec:
         memory: "2Gi"
         cpu: "2000m"
       min:
-        memory: "64Mi"
-        cpu: "50m"
+        cpu: 10m
+        memory: 16Mi

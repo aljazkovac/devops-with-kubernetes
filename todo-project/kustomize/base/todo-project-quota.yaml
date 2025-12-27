@@ -7,7 +7,7 @@ spec:
   hard:
     pods: "20"
     requests.storage: "5Gi"
-    requests.cpu: "2000m"
-    requests.memory: "2Gi"
-    limits.cpu: "4000m"
-    limits.memory: "4Gi"
+    requests.cpu: "3000m"
+    requests.memory: "3Gi"
+    limits.cpu: "6000m"
+    limits.memory: "6Gi"
