@@ -35,6 +35,11 @@ spec:
                 configMapKeyRef:
                   name: todo-backend-configmap
                   key: POSTGRES_HOST
+            - name: NATS_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: todo-backend-configmap
+                  key: NATS_URL
           ports:
             # Documents which port the container listens on (not strictly required but best practice)
             - name: http

@@ -21,4 +21,6 @@ images:
   - name: todo-app/image
     newName: aljazkovac/todo-app:v452
   - name: todo-backend/image
-    newName: aljazkovac/todo-backend:v452
+    newName: aljazkovac/todo-backend:v461
+  - name: todo-broadcaster/image
+    newName: aljazkovac/todo-broadcaster:v462
