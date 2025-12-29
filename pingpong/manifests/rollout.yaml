@@ -4,7 +4,7 @@ metadata:
   name: pingpong-dep
   namespace: exercises
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: pingpong
