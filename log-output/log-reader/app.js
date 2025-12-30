@@ -23,7 +23,7 @@ const fetchPingpongCounter = async () => {
 
 // Root route - redirects to status endpoint for user convenience
 app.get("/", (req, res) => {
-  res.status(200).send("Log reader service is healthy");
+  res.status(200).send("Log reader service is healthy - GitOps Version");
 });
 
 app.get("/healthz", async (req, res) => {
