@@ -5,10 +5,10 @@ resources:
 images:
 - name: todo-app/image
   newName: aljazkovac/todo-app
-  newTag: 18849f93f555ad3a57c52104d37bf171d331f6f5
+  newTag: 9e5a7f74796006d62e9a74a52108c53f2033e067
 - name: todo-backend/image
   newName: aljazkovac/todo-backend
-  newTag: 18849f93f555ad3a57c52104d37bf171d331f6f5
+  newTag: 9e5a7f74796006d62e9a74a52108c53f2033e067
 - name: todo-broadcaster/image
   newName: aljazkovac/todo-broadcaster
-  newTag: 18849f93f555ad3a57c52104d37bf171d331f6f5
+  newTag: 9e5a7f74796006d62e9a74a52108c53f2033e067
