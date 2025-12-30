@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: log-writer
-          image: aljazkovac/log-writer:v41
+          image: log-writer/image
           imagePullPolicy: Always
           ports:
             - containerPort: 3001
@@ -32,7 +32,7 @@ spec:
               cpu: "200m"
               memory: "128Mi"
         - name: log-reader
-          image: aljazkovac/log-reader:v41
+          image: log-reader/image
           imagePullPolicy: Always
           ports:
             - containerPort: 3000
