@@ -10,7 +10,7 @@ resources:
 images:
 - name: log-reader/image
   newName: aljazkovac/log-reader
-  newTag: f067849221483a7da78d670ecf0cdcd0949a9d72
+  newTag: 99009dc6e36b7375ae5d33d26764e9754e676a56
 - name: log-writer/image
   newName: aljazkovac/log-writer
-  newTag: f067849221483a7da78d670ecf0cdcd0949a9d72
+  newTag: 99009dc6e36b7375ae5d33d26764e9754e676a56
