@@ -203,7 +203,7 @@ async function startServer() {
     }
 
     app.listen(port, () => {
-      console.log(`Todo backend server started on port ${port}`);
+      console.log(`Todo backend server started on port ${port} - GitOps Version 2`);
     });
   } else {
     console.error("Failed to connect to database. Exiting...");
