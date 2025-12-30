@@ -19,8 +19,11 @@ resources:
   - todo-broadcaster-deployment.yaml
 images:
   - name: todo-app/image
-    newName: aljazkovac/todo-app:v452
+    newName: aljazkovac/todo-app
+    newTag: v452
   - name: todo-backend/image
-    newName: aljazkovac/todo-backend:v461
+    newName: aljazkovac/todo-backend
+    newTag: v461
   - name: todo-broadcaster/image
-    newName: aljazkovac/todo-broadcaster:v462
+    newName: aljazkovac/todo-broadcaster
+    newTag: v462
