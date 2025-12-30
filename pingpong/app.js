@@ -129,6 +129,7 @@ app.get("/healthz", async (req, res) => {
 async function startApp() {
   app.listen(PORT, () => {
     console.log(`Ping-pong application listening on port ${PORT}`);
+    console.log("Server started correctly");
   });
 
   while (true) {
