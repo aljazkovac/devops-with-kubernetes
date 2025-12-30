@@ -1,4 +1,14 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - ../../base
+- ../../base
+images:
+- name: todo-app/image
+  newName: aljazkovac/todo-app
+  newTag: a34f0b57f3fdc592f374b6f63c93c2060089347b
+- name: todo-backend/image
+  newName: aljazkovac/todo-backend
+  newTag: a34f0b57f3fdc592f374b6f63c93c2060089347b
+- name: todo-broadcaster/image
+  newName: aljazkovac/todo-broadcaster
+  newTag: a34f0b57f3fdc592f374b6f63c93c2060089347b
