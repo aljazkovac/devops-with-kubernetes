@@ -2,28 +2,38 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-  - ../../base
+- ../../base
 
 namespace: staging
 
 patches:
-  - target:
-      kind: CronJob
+- patch: |-
+    apiVersion: batch/v1
+    kind: CronJob
+    metadata:
       name: todo-backend-db-backup-cronjob
-    patch: |-
-      apiVersion: batch/v1
-      kind: CronJob
-      metadata:
-        name: todo-backend-db-backup-cronjob
-      spec:
-        suspend: true
-  - target:
-      kind: ConfigMap
+    spec:
+      suspend: true
+  target:
+    kind: CronJob
+    name: todo-backend-db-backup-cronjob
+- patch: |-
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
       name: todo-backend-configmap
-    patch: |-
-      apiVersion: v1
-      kind: ConfigMap
-      metadata:
-        name: todo-backend-configmap
-      data:
-        WEBHOOK_URL: ""
+    data:
+      WEBHOOK_URL: ""
+  target:
+    kind: ConfigMap
+    name: todo-backend-configmap
+images:
+- name: todo-app/image
+  newName: aljazkovac/todo-app
+  newTag: cacfd3b9e3656ba96a4c5b504bd5cc6640fdbda7
+- name: todo-backend/image
+  newName: aljazkovac/todo-backend
+  newTag: cacfd3b9e3656ba96a4c5b504bd5cc6640fdbda7
+- name: todo-broadcaster/image
+  newName: aljazkovac/todo-broadcaster
+  newTag: cacfd3b9e3656ba96a4c5b504bd5cc6640fdbda7
