@@ -17,3 +17,10 @@ resources:
   - todo-project-quota.yaml
   - todo-project-limitrange.yaml
   - todo-broadcaster-deployment.yaml
+
+helmCharts:
+  - name: nats
+    repo: https://nats-io.github.io/k8s/helm/charts/
+    version: 1.1.9
+    releaseName: my-nats
+    valuesFile: ../../helm/todo-project-nats-values.yaml
