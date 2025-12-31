@@ -7,11 +7,28 @@ metadata:
     purpose: devops-with-kubernetes-exercises
 
 ---
-
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: project
+  name: project-development
   labels:
-    name: project
+    name: project-development
+    purpose: devops-with-kubernetes-project
+
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: project-staging
+  labels:
+    name: project-staging
+    purpose: devops-with-kubernetes-project
+
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: project-production
+  labels:
+    name: project-production
     purpose: devops-with-kubernetes-project
