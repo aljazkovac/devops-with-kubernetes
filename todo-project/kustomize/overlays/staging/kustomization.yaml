@@ -30,10 +30,10 @@ patches:
 images:
 - name: todo-app/image
   newName: aljazkovac/todo-app
-  newTag: b928b04be7c9b34d1f044d897e73d4f0c6b94499
+  newTag: 38408ebcd3fe6d51c141b58e3cbb3b9d86bf26ab
 - name: todo-backend/image
   newName: aljazkovac/todo-backend
-  newTag: b928b04be7c9b34d1f044d897e73d4f0c6b94499
+  newTag: 38408ebcd3fe6d51c141b58e3cbb3b9d86bf26ab
 - name: todo-broadcaster/image
   newName: aljazkovac/todo-broadcaster
-  newTag: b928b04be7c9b34d1f044d897e73d4f0c6b94499
+  newTag: 38408ebcd3fe6d51c141b58e3cbb3b9d86bf26ab
