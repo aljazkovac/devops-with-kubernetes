@@ -1,11 +1,9 @@
-name: Build and publish Todo Project (Main)
+name: Build and publish Todo Project (Production)
 
 on:
   push:
-    branches:
-      - main
-    paths:
-      - "todo-project/**"
+    tags:
+      - "todo-v*"
 
 jobs:
   build-publish:
@@ -41,32 +39,17 @@ jobs:
         uses: imranismail/setup-kustomize@v2
 
       # ==========================================
-      # DEVELOPMENT DEPLOYMENT
+      # PRODUCTION DEPLOYMENT
       # ==========================================
-      - name: Update Development Image Tags
-        working-directory: todo-project/kustomize/overlays/development
+      - name: Update Production Image Tags
+        working-directory: todo-project/kustomize/overlays/production
         run: |
           kustomize edit set image todo-app/image=aljazkovac/todo-app:$GITHUB_SHA
           kustomize edit set image todo-backend/image=aljazkovac/todo-backend:$GITHUB_SHA
           kustomize edit set image todo-broadcaster/image=aljazkovac/todo-broadcaster:$GITHUB_SHA
 
-      # ==========================================
-      # STAGING DEPLOYMENT
-      # ==========================================
-      - name: Update Staging Image Tags
-        working-directory: todo-project/kustomize/overlays/staging
-        run: |
-          kustomize edit set image todo-app/image=aljazkovac/todo-app:$GITHUB_SHA
-          kustomize edit set image todo-backend/image=aljazkovac/todo-backend:$GITHUB_SHA
-          kustomize edit set image todo-broadcaster/image=aljazkovac/todo-broadcaster:$GITHUB_SHA
-
-      # ==========================================
-      # COMMIT CHANGES
-      # ==========================================
-      - name: Commit Development And Staging Kustomization
+      - name: Commit Production Kustomization
         uses: EndBug/add-and-commit@v9
         with:
-          add: |
-            todo-project/kustomize/overlays/development/kustomization.yaml
-            todo-project/kustomize/overlays/staging/kustomization.yaml
-          message: "Development and Staging deployment: ${{ github.sha }}"
+          add: todo-project/kustomize/overlays/production/kustomization.yaml
+          message: "Production deployment: ${{ github.ref_name }}"
