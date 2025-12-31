@@ -20,9 +20,9 @@ reloader:
       memory: 64Mi
 
 promExporter:
-  enabled: true
+  enabled: false
   podMonitor:
-    enabled: true
+    enabled: false
     merge:
       metadata:
         labels:
