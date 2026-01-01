@@ -35,6 +35,11 @@ jobs:
         run: |-
           docker buildx build --platform linux/amd64 -t "aljazkovac/todo-broadcaster:$GITHUB_SHA" . --push
 
+      - name: Checkout Main Branch for Config Updates
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
       - name: Set up Kustomize
         uses: imranismail/setup-kustomize@v2
 
