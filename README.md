@@ -117,6 +117,7 @@ Below is a comparison of the two approaches to help understand the trade-offs.
 - [4.7](https://github.com/aljazkovac/devops-with-kubernetes/tree/4.7) - Baby Steps to GitOps
 - [4.8](https://github.com/aljazkovac/devops-with-kubernetes/tree/4.8) - TODO Project GitOps
 - [4.9](https://github.com/aljazkovac/devops-with-kubernetes/tree/4.9) - TODO Project environments
+- [4.10](https://github.com/aljazkovac/devops-with-kubernetes/tree/4.10) - TODO Project Full GitOps (see [config repo](https://github.com/aljazkovac/devops-with-kubernetes-gitops)).
 
 ---
 
