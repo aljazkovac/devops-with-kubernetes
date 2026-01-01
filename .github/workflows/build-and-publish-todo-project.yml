@@ -70,22 +70,12 @@ jobs:
           kustomize edit set image todo-backend/image=aljazkovac/todo-backend:$GITHUB_SHA
           kustomize edit set image todo-broadcaster/image=aljazkovac/todo-broadcaster:$GITHUB_SHA
 
-            # ==========================================
-
-            # COMMIT CHANGES TO CONFIG REPO
-
-            # ==========================================
-
-            - name: Commit and Push to Config Repo
-
-              uses: EndBug/add-and-commit@v9
-
-              with:
-
-                cwd: './config-repo'
-
-                add: '.'
-
-                message: "Update images to ${{ github.sha }} (Dev/Staging)"
-
-      
+      # ==========================================
+      # COMMIT CHANGES TO CONFIG REPO
+      # ==========================================
+      - name: Commit and Push to Config Repo
+        uses: EndBug/add-and-commit@v9
+        with:
+          cwd: "./config-repo"
+          add: "."
+          message: "Update images to ${{ github.sha }} (Dev/Staging)"
