@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout Tag (Code Repo)
         uses: actions/checkout@v4
 
       - name: Login to Docker Hub
@@ -35,26 +35,45 @@ jobs:
         run: |-
           docker buildx build --platform linux/amd64 -t "aljazkovac/todo-broadcaster:$GITHUB_SHA" . --push
 
-      - name: Checkout Main Branch for Config Updates
-        uses: actions/checkout@v4
-        with:
-          ref: main
-
       - name: Set up Kustomize
         uses: imranismail/setup-kustomize@v2
+
+      # ==========================================
+      # CHECKOUT CONFIG REPO
+      # ==========================================
+      - name: Checkout Config Repo
+        uses: actions/checkout@v4
+        with:
+          repository: aljazkovac/devops-with-kubernetes-gitops
+          path: config-repo
+          token: ${{ secrets.CONFIG_REPO_PAT }}
 
       # ==========================================
       # PRODUCTION DEPLOYMENT
       # ==========================================
       - name: Update Production Image Tags
-        working-directory: todo-project/kustomize/overlays/production
+        working-directory: config-repo/todo-project/kustomize/overlays/production
         run: |
           kustomize edit set image todo-app/image=aljazkovac/todo-app:$GITHUB_SHA
           kustomize edit set image todo-backend/image=aljazkovac/todo-backend:$GITHUB_SHA
           kustomize edit set image todo-broadcaster/image=aljazkovac/todo-broadcaster:$GITHUB_SHA
 
-      - name: Commit Production Kustomization
-        uses: EndBug/add-and-commit@v9
-        with:
-          add: todo-project/kustomize/overlays/production/kustomization.yaml
-          message: "Production deployment: ${{ github.ref_name }}"
+            # ==========================================
+
+            # COMMIT CHANGES TO CONFIG REPO
+
+            # ==========================================
+
+            - name: Commit and Push to Config Repo
+
+              uses: EndBug/add-and-commit@v9
+
+              with:
+
+                cwd: './config-repo'
+
+                add: '.'
+
+                message: "Update images to ${{ github.sha }} (Production: ${{ github.ref_name }})"
+
+      
