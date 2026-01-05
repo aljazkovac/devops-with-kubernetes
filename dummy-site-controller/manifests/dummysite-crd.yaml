@@ -1,0 +1,28 @@
+apiVersion: apiextensions.k8s.io/v1 # Specifies the API version for defining CRDs. 'v1' is the current stable version.
+kind: CustomResourceDefinition # Defines the type of resource we are creating. This tells Kubernetes "I am teaching you a new object type".
+metadata: # Metadata for the CRD itself.
+  name: dummysites.stable.dwk # The unique name of the CRD. It MUST be in the format <plural>.<group>.
+spec: # The specification that defines how our new resource behaves.
+  group: stable.dwk # The API group name. This allows us to group related resources (like apps/v1 or batch/v1).
+  versions: # A list of supported API versions for our resource (e.g., v1, v1beta1).
+    - name: v1 # The name of this specific version.
+      served: true # Whether this version is enabled via the REST API.
+      storage: true # Whether this version is stored in etcd. One version must be the storage version.
+      schema: # Defines the structure (schema) of the custom resource using OpenAPI v3.
+        openAPIV3Schema:
+          type: object # The root of the resource is an object.
+          properties: # Defines the fields allowed in this object.
+            spec: # The 'spec' field, standard in K8s resources for desired state.
+              type: object # 'spec' itself is an object.
+              properties: # Fields inside 'spec'.
+                website_url: # Our custom field! This is where users will put the URL to copy.
+                  type: string # Defines the data type of 'website_url'.
+              required: # Lists mandatory fields.
+                - website_url # Ensures a 'DummySite' cannot be created without a 'website_url'.
+  scope: Namespaced # 'Namespaced' means this resource lives in a specific namespace (like Pods).
+  names: # Defines how users will refer to this resource.
+    plural: dummysites # Used in URL: /apis/stable.dwk/v1/namespaces/default/dummysites
+    singular: dummysite # Singular name, used in 'kubectl get dummysite'.
+    kind: DummySite # The UpperCamelCase type name used in manifests (kind: DummySite).
+    shortNames: # Short aliases for CLI convenience.
+      - ds # Allows 'kubectl get ds' instead of 'kubectl get dummysites'.
