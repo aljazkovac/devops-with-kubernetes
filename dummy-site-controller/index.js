@@ -1,27 +1,23 @@
 const k8s = require("@kubernetes/client-node");
 const axios = require("axios");
 
-// Initialize Kubernetes configuration from the environment (e.g., ~/.kube/config or InCluster config)
 const kc = new k8s.KubeConfig();
 kc.loadFromDefault();
 
-// Create API clients for different Kubernetes resource types
-const k8sApi = kc.makeApiClient(k8s.CoreV1Api); // For ConfigMaps and Services
-const k8sAppsApi = kc.makeApiClient(k8s.AppsV1Api); // For Deployments
-const k8sCustomApi = kc.makeApiClient(k8s.CustomObjectsApi); // For our Custom Resource (DummySite)
-const watch = new k8s.Watch(kc); // For watching events in real-time
+const k8sApi = kc.makeApiClient(k8s.CoreV1Api);
+const k8sAppsApi = kc.makeApiClient(k8s.AppsV1Api);
+const watch = new k8s.Watch(kc);
 
-// CRD specific constants
 const GROUP = "stable.dwk";
 const VERSION = "v1";
 const PLURAL = "dummysites";
 
-/**
- * Helper to fetch the HTML content of the target website.
- */
 async function fetchWebsite(url) {
+  console.log(`Fetching website: ${url}`);
   try {
-    const response = await axios.get(url);
+    const userAgent = "DWK super cool bot";
+    const headers = { "User-Agent": userAgent };
+    const response = await axios.get(url, { headers });
     return response.data;
   } catch (error) {
     console.error(`Error fetching URL ${url}: ${error.message}`);
@@ -29,12 +25,6 @@ async function fetchWebsite(url) {
   }
 }
 
-/**
- * Creates an OwnerReference object.
- * This is crucial! It tells Kubernetes that the ConfigMap, Deployment, and Service
- * "belong" to the DummySite. When the DummySite is deleted, K8s will automatically
- * delete these resources (Garbage Collection).
- */
 function getOwnerReference(dummySite) {
   return [
     {
@@ -48,15 +38,15 @@ function getOwnerReference(dummySite) {
   ];
 }
 
-/**
- * Creates or updates a ConfigMap containing the fetched HTML.
- */
 async function createConfigMap(namespace, name, htmlContent, ownerRef) {
-  const configMap = {
+  const cmName = `${name}-config`;
+  console.log(`Creating ConfigMap: ${cmName} in ${namespace}`);
+
+  const body = {
     apiVersion: "v1",
     kind: "ConfigMap",
     metadata: {
-      name: `${name}-config`,
+      name: cmName,
       namespace: namespace,
       ownerReferences: ownerRef,
     },
@@ -66,32 +56,34 @@ async function createConfigMap(namespace, name, htmlContent, ownerRef) {
   };
 
   try {
-    await k8sApi.createNamespacedConfigMap(namespace, configMap);
-    console.log(`Created ConfigMap: ${name}-config`);
+    // Attempting OBJECT-BASED call for version 1.4.0+
+    await k8sApi.createNamespacedConfigMap({ namespace, body });
+    console.log(`Created ConfigMap: ${cmName}`);
   } catch (err) {
-    // If it already exists (HTTP 409), we replace it with the new HTML
     if (err.response && err.response.statusCode === 409) {
-      await k8sApi.replaceNamespacedConfigMap(
-        `${name}-config`,
+      console.log(`ConfigMap ${cmName} exists, updating...`);
+      await k8sApi.replaceNamespacedConfigMap({
+        name: cmName,
         namespace,
-        configMap
-      );
-      console.log(`Updated ConfigMap: ${name}-config`);
+        body,
+      });
+      console.log(`Updated ConfigMap: ${cmName}`);
     } else {
-      console.error(`Error creating/updating ConfigMap: ${err}`);
+      console.error(`Error in createConfigMap: ${err.message}`);
+      // Fallback: try positional if object failed? No, let's stick to one.
     }
   }
 }
 
-/**
- * Creates a Deployment running Nginx, mounting the ConfigMap as the website root.
- */
 async function createDeployment(namespace, name, ownerRef) {
-  const deployment = {
+  const deployName = `${name}-deploy`;
+  console.log(`Creating Deployment: ${deployName} in ${namespace}`);
+
+  const body = {
     apiVersion: "apps/v1",
     kind: "Deployment",
     metadata: {
-      name: `${name}-deploy`,
+      name: deployName,
       namespace: namespace,
       ownerReferences: ownerRef,
     },
@@ -126,24 +118,24 @@ async function createDeployment(namespace, name, ownerRef) {
   };
 
   try {
-    await k8sAppsApi.createNamespacedDeployment(namespace, deployment);
-    console.log(`Created Deployment: ${name}-deploy`);
+    await k8sAppsApi.createNamespacedDeployment({ namespace, body });
+    console.log(`Created Deployment: ${deployName}`);
   } catch (err) {
     if (err.response && err.response.statusCode !== 409) {
-      console.error(`Error creating Deployment: ${err}`);
+      console.error(`Error in createDeployment: ${err.message}`);
     }
   }
 }
 
-/**
- * Creates a Service to expose the Nginx deployment.
- */
 async function createService(namespace, name, ownerRef) {
-  const service = {
+  const svcName = `${name}-svc`;
+  console.log(`Creating Service: ${svcName} in ${namespace}`);
+
+  const body = {
     apiVersion: "v1",
     kind: "Service",
     metadata: {
-      name: `${name}-svc`,
+      name: svcName,
       namespace: namespace,
       ownerReferences: ownerRef,
     },
@@ -154,39 +146,30 @@ async function createService(namespace, name, ownerRef) {
   };
 
   try {
-    await k8sApi.createNamespacedService(namespace, service);
-    console.log(`Created Service: ${name}-svc`);
+    await k8sApi.createNamespacedService({ namespace, body });
+    console.log(`Created Service: ${svcName}`);
   } catch (err) {
     if (err.response && err.response.statusCode !== 409) {
-      console.error(`Error creating Service: ${err}`);
+      console.error(`Error in createService: ${err.message}`);
     }
   }
 }
 
-/**
- * The "Reconciliation Loop" logic.
- * Ensures the cluster state matches the desired state defined in the DummySite resource.
- */
 async function reconcile(obj) {
-  const { namespace, name } = obj.metadata;
+  const namespace = obj.metadata.namespace || "default";
+  const name = obj.metadata.name;
   const url = obj.spec.website_url;
 
-  console.log(`Reconciling DummySite: ${name} (URL: ${url})`);
+  console.log(`--- Reconciling DummySite: ${name} ---`);
 
   const html = await fetchWebsite(url);
   const ownerRef = getOwnerReference(obj);
 
-  // 1. Save HTML to ConfigMap
   await createConfigMap(namespace, name, html, ownerRef);
-  // 2. Ensure Deployment exists
   await createDeployment(namespace, name, ownerRef);
-  // 3. Ensure Service exists
   await createService(namespace, name, ownerRef);
 }
 
-/**
- * Watches for changes to DummySite resources.
- */
 function startWatch() {
   const path = `/apis/${GROUP}/${VERSION}/${PLURAL}`;
   console.log(`Watching for events at: ${path}`);
@@ -195,19 +178,13 @@ function startWatch() {
     path,
     {},
     (type, obj) => {
-      // When a resource is Added or Modified, run the reconciliation
       if (type === "ADDED" || type === "MODIFIED") {
         reconcile(obj).catch((err) => console.error("Reconcile error:", err));
-      } else if (type === "DELETED") {
-        console.log(
-          `DummySite ${obj.metadata.name} deleted. Child resources will be removed by K8s.`
-        );
       }
     },
     (err) => {
       if (err) console.error("Watch error:", err);
-      console.log("Restarting watch...");
-      setTimeout(startWatch, 1000); // Wait 1s before restarting to avoid tight loops on error
+      setTimeout(startWatch, 1000);
     }
   );
 }

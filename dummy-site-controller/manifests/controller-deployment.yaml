@@ -16,7 +16,7 @@ spec:
       serviceAccountName: dummy-site-controller-sa
       containers:
         - name: controller
-          image: dummy-site-controller:latest
+          image: aljazkovac/dummy-site-controller:v56
           imagePullPolicy: Always
           resources:
             limits:
