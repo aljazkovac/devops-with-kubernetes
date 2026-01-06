@@ -1,0 +1,61 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"gateway.networking.k8s.io/v1","kind":"Gateway","metadata":{"annotations":{},"name":"bookinfo-gateway","namespace":"default"},"spec":{"gatewayClassName":"istio","listeners":[{"allowedRoutes":{"namespaces":{"from":"Same"}},"name":"http","port":80,"protocol":"HTTP"}]}}
+    networking.istio.io/service-type: ClusterIP
+  name: bookinfo-gateway
+  namespace: default
+spec:
+  gatewayClassName: istio
+  listeners:
+  - allowedRoutes:
+      namespaces:
+        from: Same
+    name: http
+    port: 80
+    protocol: HTTP
+  addresses:
+  - type: Hostname
+    value: bookinfo-gateway-istio.default.svc.cluster.local
+  conditions:
+  - lastTransitionTime: "2026-01-06T16:30:36Z"
+    message: Resource accepted
+    observedGeneration: 1
+    reason: Accepted
+    type: Accepted
+  - lastTransitionTime: "2026-01-06T16:30:50Z"
+    message: Resource programmed, assigned to service(s) bookinfo-gateway-istio.default.svc.cluster.local:80
+    observedGeneration: 1
+    reason: Programmed
+    type: Programmed
+  listeners:
+  - attachedRoutes: 1
+    conditions:
+    - lastTransitionTime: "2026-01-06T16:30:36Z"
+      message: No errors found
+      observedGeneration: 1
+      reason: Accepted
+      type: Accepted
+    - lastTransitionTime: "2026-01-06T16:30:36Z"
+      message: No errors found
+      observedGeneration: 1
+      reason: NoConflicts
+      type: Conflicted
+    - lastTransitionTime: "2026-01-06T16:30:36Z"
+      message: No errors found
+      observedGeneration: 1
+      reason: Programmed
+      type: Programmed
+    - lastTransitionTime: "2026-01-06T16:30:36Z"
+      message: No errors found
+      observedGeneration: 1
+      reason: ResolvedRefs
+      type: ResolvedRefs
+    name: http
+    supportedKinds:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+    - group: gateway.networking.k8s.io
+      kind: GRPCRoute

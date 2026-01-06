@@ -1,0 +1,58 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"gateway.networking.k8s.io/v1","kind":"HTTPRoute","metadata":{"annotations":{},"name":"bookinfo","namespace":"default"},"spec":{"parentRefs":[{"name":"bookinfo-gateway"}],"rules":[{"backendRefs":[{"name":"productpage","port":9080}],"matches":[{"path":{"type":"Exact","value":"/productpage"}},{"path":{"type":"PathPrefix","value":"/static"}},{"path":{"type":"Exact","value":"/login"}},{"path":{"type":"Exact","value":"/logout"}},{"path":{"type":"PathPrefix","value":"/api/v1/products"}}]}]}}
+  name: bookinfo
+  namespace: default
+spec:
+  parentRefs:
+  - group: gateway.networking.k8s.io
+    kind: Gateway
+    name: bookinfo-gateway
+  rules:
+  - backendRefs:
+    - group: ""
+      kind: Service
+      name: productpage
+      port: 9080
+      weight: 1
+    matches:
+    - path:
+        type: Exact
+        value: /productpage
+    - path:
+        type: PathPrefix
+        value: /static
+    - path:
+        type: Exact
+        value: /login
+    - path:
+        type: Exact
+        value: /logout
+    - path:
+        type: PathPrefix
+        value: /api/v1/products
+  parents:
+  - conditions:
+    - lastTransitionTime: "2026-01-06T16:30:36Z"
+      message: Route was valid
+      observedGeneration: 1
+      reason: Accepted
+      type: Accepted
+    - lastTransitionTime: "2026-01-06T16:30:36Z"
+      message: All references resolved
+      observedGeneration: 1
+      reason: ResolvedRefs
+      type: ResolvedRefs
+    - lastTransitionTime: "2026-01-06T16:30:36Z"
+      message: All waypoints resolved
+      observedGeneration: 1
+      reason: ResolvedWaypoints
+      type: ResolvedWaypoints
+    controllerName: istio.io/gateway-controller
+    parentRef:
+      group: gateway.networking.k8s.io
+      kind: Gateway
+      name: bookinfo-gateway

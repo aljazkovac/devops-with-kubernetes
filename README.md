@@ -126,3 +126,30 @@ Below is a comparison of the two approaches to help understand the trade-offs.
 The query: `sum(kube_pod_info{namespace="prometheus", created_by_kind="StatefulSet"})`
 
 ---
+
+### Chapter 6: Under the Hood
+
+- [5.1](https://github.com/aljazkovac/devops-with-kubernetes/tree/5.1) - DIY CRD & Controller
+
+- [5.2](https://github.com/aljazkovac/devops-with-kubernetes/tree/5.2) - Getting Started with ISTIO Service Mesh
+
+---
+
+#### Exercise 5.2: Istio Service Mesh (Ambient Mode)
+
+This exercise focuses on the transition from traditional ingress to a Service Mesh architecture using **Istio Ambient Mode**. Unlike the "sidecar" approach, Ambient mode splits Istio's functionality into a shared Layer 4 secure overlay (via `ztunnel`) and an optional Layer 7 processing layer (via `waypoint` proxies), reducing resource overhead and simplifying operations.
+
+The setup for this exercise includes:
+
+- **Istio Installation**: Deployed with the `ambient` profile on a `k3d` cluster.
+- **Gateway API**: Leverages the Kubernetes Gateway API (`gateway.networking.k8s.io`) rather than the legacy Istio `VirtualService` or `Gateway` resources.
+- **Sample Application**: Deployment of the Bookinfo application to verify mTLS security and traffic routing.
+
+The **`service-mesh/`** directory contains the core networking manifests exported from the cluster (`kubectl get -o yaml`):
+
+- `gateway.yaml`: Defines the entry point into the mesh using the `istio` GatewayClass.
+- `route.yaml`: An `HTTPRoute` that connects the gateway to the `productpage` service.
+
+To replicate this setup, ensure the Gateway API CRDs are installed before applying these manifests.
+
+---
