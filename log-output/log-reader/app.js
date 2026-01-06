@@ -6,6 +6,7 @@ const app = express();
 
 const logFile = path.join("/shared", "logs.txt");
 const PINGPONG_SERVICE_URL = "http://pingpong-svc:2346/counter";
+const GREETER_SERVICE_URL = "http://greeter-svc:3000";
 
 // Helper function to fetch counter from pingpong service
 const fetchPingpongCounter = async () => {
@@ -18,6 +19,20 @@ const fetchPingpongCounter = async () => {
   } catch (err) {
     console.log("Error fetching counter from pingpong service:", err.message);
     return "Ping / Pongs: 0";
+  }
+};
+
+// Helper function to fetch greeting from greeter service
+const fetchGreeting = async () => {
+  try {
+    const response = await fetch(GREETER_SERVICE_URL);
+    if (response.ok) {
+      return await response.text();
+    }
+    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+  } catch (err) {
+    console.log("Error fetching greeting from greeter service:", err.message);
+    return "Greeting: Service unavailable";
   }
 };
 
@@ -72,6 +87,14 @@ app.get("/status", async (req, res) => {
       output += "\n" + counter;
       console.log(`Counter output: ${counter.trim()}`);
     }
+
+    // Fetch greeting from greeter service
+    const greeting = await fetchGreeting();
+    if (greeting) {
+      output += "\ngreetings: " + greeting;
+      console.log(`Greeting output: ${greeting.trim()}`);
+    }
+
     console.log("Combined output:\n", output.trim());
     res.type("text/plain").send(output);
   } catch (error) {

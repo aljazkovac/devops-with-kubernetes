@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: greeter-config
+  namespace: exercises
+data:
+  message-v1: "Hello from version 1"
+  message-v2: "Hello from version 2"

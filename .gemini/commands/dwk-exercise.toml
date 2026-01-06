@@ -17,5 +17,5 @@ Present your strategic plan in markdown. It should be the direct result of your 
 4. **Verification Strategy:** Explain how the success of this plan would be measured. What should be tested to ensure the goal is met without introducing regressions?
 5. **Anticipated Challenges & Considerations:** Based on your analysis, what potential risks, dependencies, or trade-offs do you foresee?
 
-Your final output should be ONLY this strategic plan.
+Your final output should be ONLY this strategic plan and it should be saved in a file called "PLAN.md" and saved at the root of the repository you are in.
 """
