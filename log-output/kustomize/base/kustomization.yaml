@@ -1,16 +1,16 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - configmap.yaml
-  - deployment.yaml
-  - gateway.yaml
-  - pvc.yaml
-  - route.yaml
-  - service.yaml
+- configmap.yaml
+- deployment.yaml
+- gateway.yaml
+- pvc.yaml
+- route.yaml
+- service.yaml
 images:
-  - name: log-reader/image
-    newName: aljazkovac/log-reader
-    newTag: mesh
-  - name: log-writer/image
-    newName: aljazkovac/log-writer
-    newTag: 99009dc6e36b7375ae5d33d26764e9754e676a56
+- name: log-reader/image
+  newName: aljazkovac/log-reader
+  newTag: 295c194df5ea14b823f4c6ae83bbfcc3239599d5
+- name: log-writer/image
+  newName: aljazkovac/log-writer
+  newTag: 295c194df5ea14b823f4c6ae83bbfcc3239599d5
