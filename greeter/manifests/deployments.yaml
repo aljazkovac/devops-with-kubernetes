@@ -20,8 +20,8 @@ spec:
     spec:
       containers:
         - name: greeter
-          image: greeter:v1
-          imagePullPolicy: Never
+          image: aljazkovac/greeter:v1
+          imagePullPolicy: Always
           ports:
             - containerPort: 3000
           env:
@@ -60,8 +60,8 @@ spec:
     spec:
       containers:
         - name: greeter
-          image: greeter:v2
-          imagePullPolicy: Never
+          image: aljazkovac/greeter:v2
+          imagePullPolicy: Always
           ports:
             - containerPort: 3000
           env:
