@@ -137,6 +137,8 @@ The query: `sum(kube_pod_info{namespace="prometheus", created_by_kind="StatefulS
 
 - [5.4](https://github.com/aljazkovac/devops-with-kubernetes/tree/5.4) - Wikipedia with init and sidecar
 
+- [5.5](https://github.com/aljazkovac/devops-with-kubernetes/tree/5.5) - Platform Comparison
+
 ---
 
 #### Exercise 5.2: Istio Service Mesh (Ambient Mode)
@@ -155,5 +157,36 @@ The **`service-mesh/`** directory contains the core networking manifests exporte
 - `route.yaml`: An `HTTPRoute` that connects the gateway to the `productpage` service.
 
 To replicate this setup, ensure the Gateway API CRDs are installed before applying these manifests.
+
+---
+
+#### Exercise 5.5: Platform Comparison
+
+This exercise involves comparing two Kubernetes service providers. I have chosen to compare **Rancher** and **OpenShift**.
+
+##### Comparison: Rancher vs. OpenShift
+
+- **Philosophy & Focus:**
+
+  - **Rancher:** Focuses on **multi-cluster management**. It acts as a "manager of managers," allowing you to unify the operations of any Kubernetes distribution (EKS, AKS, GKE, K3s, RKE) under a single pane of glass. It is lightweight and flexible.
+  - **OpenShift:** Focuses on being a **complete enterprise Platform as a Service (PaaS)**. It is an "opinionated" distribution that dictates the entire stack, from the OS (Red Hat CoreOS) to the CI/CD pipelines and developer tools.
+
+- **Flexibility vs. Integration:**
+
+  - **Rancher:** Highly **flexible**. It doesn't lock you into a specific ecosystem. You can run it on any infrastructure and manage diverse clusters side-by-side. It is open-source friendly and works well with standard CNCF tools.
+  - **OpenShift:** Highly **integrated**. It provides a cohesive, "batteries-included" experience with built-in monitoring, logging, and developer consoles. However, this comes at the cost of flexibility and a heavier resource footprint.
+
+- **Target Audience:**
+  - **Rancher:** Best for teams that need to manage **diverse infrastructure**, want to avoid vendor lock-in, or prefer a lightweight, modular approach to building their platform.
+  - **OpenShift:** Best for **large enterprises** that want a standardized, supported, and secure-by-default platform across the entire organization, and are willing to pay for the "Red Hat way."
+
+##### The Verdict: Rancher
+
+For the context of a general "DevOps" approach that values **flexibility, adaptability, and multi-cloud capability**, I argue that **Rancher** is the better choice.
+
+- **Why Rancher wins:**
+  - **No Lock-in:** Rancher empowers you to choose the best underlying Kubernetes engine for each specific use case (e.g., K3s for edge, EKS for production, RKE for on-prem) without fragmenting your operations. OpenShift often forces you into the "OpenShift Island."
+  - **Lower Barrier to Entry:** You can spin up a Rancher management server in minutes on a single node. OpenShift's installation and resource requirements are significantly higher.
+  - **True Multi-Cluster:** As organizations grow, they inevitably end up with clusters in different clouds. Rancher is designed from the ground up to solve this specific problem, whereas OpenShift is primarily focused on managing OpenShift clusters.
 
 ---
