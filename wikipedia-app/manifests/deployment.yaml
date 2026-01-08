@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wikipedia-dep
+  namespace: exercises
+  labels:
+    app: wikipedia
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wikipedia
+  template:
+    metadata:
+      labels:
+        app: wikipedia
+    spec:
+      volumes:
+        - name: shared-content
+          emptyDir: {}
+      initContainers:
+        - name: init-content
+          image: curlimages/curl
+          command:
+            [
+              "sh",
+              "-c",
+              "curl -L -o /share/index.html https://en.wikipedia.org/wiki/Kubernetes",
+            ]
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "16Mi"
+            limits:
+              cpu: "100m"
+              memory: "32Mi"
+          volumeMounts:
+            - name: shared-content
+              mountPath: /share
+      containers:
+        - name: nginx
+          image: nginx:1.25-alpine
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "32Mi"
+            limits:
+              cpu: "100m"
+              memory: "64Mi"
+          volumeMounts:
+            - name: shared-content
+              mountPath: /usr/share/nginx/html
+        - name: sidecar-updater
+          image: curlimages/curl
+          # Random interval between 5 and 15 minutes (300-900 seconds)
+          command:
+            [
+              "sh",
+              "-c",
+              'while true; do SLEEP_TIME=$((300 + RANDOM % 601)); echo "Sleeping for ${SLEEP_TIME} seconds..."; sleep ${SLEEP_TIME}; echo ''Fetching random Wikipedia page...''; curl -L -o /share/index.html https://en.wikipedia.org/wiki/Special:Random; done',
+            ]
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "16Mi"
+            limits:
+              cpu: "100m"
+              memory: "32Mi"
+          volumeMounts:
+            - name: shared-content
+              mountPath: /share

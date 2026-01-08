@@ -133,6 +133,10 @@ The query: `sum(kube_pod_info{namespace="prometheus", created_by_kind="StatefulS
 
 - [5.2](https://github.com/aljazkovac/devops-with-kubernetes/tree/5.2) - Getting Started with ISTIO Service Mesh
 
+- [5.3](https://github.com/aljazkovac/devops-with-kubernetes/tree/5.3) - Log app, the Service Mesh Edition
+
+- [5.4](https://github.com/aljazkovac/devops-with-kubernetes/tree/5.4) - Wikipedia with init and sidecar
+
 ---
 
 #### Exercise 5.2: Istio Service Mesh (Ambient Mode)
