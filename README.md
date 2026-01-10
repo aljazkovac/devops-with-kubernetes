@@ -139,6 +139,8 @@ The query: `sum(kube_pod_info{namespace="prometheus", created_by_kind="StatefulS
 
 - [5.5](https://github.com/aljazkovac/devops-with-kubernetes/tree/5.5) - Platform Comparison
 
+- [5.6](https://github.com/aljazkovac/devops-with-kubernetes/tree/5.6) - Serverless with Knative
+
 ---
 
 #### Exercise 5.2: Istio Service Mesh (Ambient Mode)
@@ -195,5 +197,27 @@ For the context of a general "DevOps" approach that values **flexibility, adapta
   - **No Lock-in:** Rancher empowers you to choose the best underlying Kubernetes engine for each specific use case (e.g., K3s for edge, EKS for production, RKE for on-prem) without fragmenting your operations. OpenShift often forces you into the "OpenShift Island."
   - **Lower Barrier to Entry:** You can spin up a Rancher management server in minutes on a single node. OpenShift's installation and resource requirements are significantly higher.
   - **True Multi-Cluster:** As organizations grow, they inevitably end up with clusters in different clouds. Rancher is designed from the ground up to solve this specific problem, whereas OpenShift is primarily focused on managing OpenShift clusters.
+
+---
+
+#### Exercise 5.6: Serverless with Knative
+
+This exercise demonstrates the deployment of a serverless application using **Knative Serving** on a local `k3d` cluster.
+
+**Key Components:**
+
+- **Knative Serving:** Manages the lifecycle of serverless workloads (deployments, revisions, routes).
+- **Kourier:** A lightweight Ingress controller/networking layer for Knative, chosen for its suitability for local environments compared to Istio.
+- **Magic DNS (sslip.io):** Provides automatic DNS resolution for local IPs (e.g., `172.18.0.3.sslip.io`).
+
+**Implementation Details:**
+The exercise involves:
+
+1. **Cluster Setup:** Creating a `k3d` cluster with mapped ports (`8081:80`) and Traefik disabled to allow Kourier to manage ingress.
+2. **Deployment:** Deploying the `helloworld-go` sample app.
+3. **Scale-to-Zero:** Verifying that pods terminate after inactivity and spin up ("cold start") upon receiving a request.
+4. **Traffic Splitting:** Configuring a "Canary" release by splitting traffic 50/50 between two revisions (blue/green deployment).
+
+For full artifacts and commands, see the [knative-exercise/](knative-exercise/) directory.
 
 ---
