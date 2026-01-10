@@ -141,6 +141,8 @@ The query: `sum(kube_pod_info{namespace="prometheus", created_by_kind="StatefulS
 
 - [5.6](https://github.com/aljazkovac/devops-with-kubernetes/tree/5.6) - Serverless with Knative
 
+- [5.7](https://github.com/aljazkovac/devops-with-kubernetes/tree/5.7) - Serverless PingPong
+
 ---
 
 #### Exercise 5.2: Istio Service Mesh (Ambient Mode)
