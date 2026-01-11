@@ -143,6 +143,8 @@ The query: `sum(kube_pod_info{namespace="prometheus", created_by_kind="StatefulS
 
 - [5.7](https://github.com/aljazkovac/devops-with-kubernetes/tree/5.7) - Serverless PingPong
 
+- [5.8](https://github.com/aljazkovac/devops-with-kubernetes/tree/5.8) - Landscape
+
 ---
 
 #### Exercise 5.2: Istio Service Mesh (Ambient Mode)
@@ -221,5 +223,49 @@ The exercise involves:
 4. **Traffic Splitting:** Configuring a "Canary" release by splitting traffic 50/50 between two revisions (blue/green deployment).
 
 For full artifacts and commands, see the [knative-exercise/](knative-exercise/) directory.
+
+---
+
+#### Exercise 5.8: Landscape
+
+- **Orchestration & Management:**
+  - **Kubernetes:** Core platform.
+  - **K3d / K3s:** Local development clusters.
+  - **Google Kubernetes Engine (GKE):** Cloud production environment.
+  - **Rancher:** Compared/Evaluated (Ex 5.5).
+  - **OpenShift:** Compared/Evaluated (Ex 5.5).
+- **App Definition & Development:**
+  - **Helm:** Used to install Prometheus (`kube-prometheus-stack`) and NATS (`nats/nats`).
+  - **Kustomize:** Used for configuration management across environments.
+  - **Docker:** Containerization.
+- **Observability & Analysis:**
+  - **Prometheus:** Monitoring (Ex 4.3).
+  - **Grafana:** Dashboards (via kube-prometheus-stack).
+  - **Loki:** Logging (mentioned in Ex 2.10 goal, likely part of stack).
+  - **Lens:** Kubernetes IDE (mentioned as debugging tool).
+- **Service Proxy / Mesh / Networking:**
+  - **Istio:** Service Mesh (Ambient Mode, Ex 5.2/5.3).
+  - **Envoy:** Proxy (Implicit via Istio).
+  - **Traefik:** Ingress Controller (Default in K3d).
+  - **Nginx:** Ingress Controller (Standard GKE/K8s) and Static file serving (Ex 5.4).
+  - **Gateway API:** Traffic management (Ex 3.3, 5.2).
+  - **NATS:** Messaging System (Ex 4.6).
+  - **CoreDNS:** Implicit (K8s standard).
+  - **Flannel:** Implicit (K3s CNI).
+- **Serverless:**
+  - **Knative Serving:** Serverless workloads (Ex 5.6).
+  - **Kourier:** Knative Ingress (Ex 5.6).
+- **CI/CD:**
+  - **GitHub Actions:** CI pipelines.
+  - **Argo CD:** GitOps (Ex 4.7 - 4.10).
+  - **Argo Rollouts:** Canary deployments (Ex 4.4).
+- **Databases & Storage:**
+  - **PostgreSQL:** Application database.
+  - **Google Cloud Storage (GCS):** Database backups (Ex 3.10).
+  - **Local Path Provisioner:** Storage in K3d (Implicit).
+- **Languages & Frameworks:**
+  - **Node.js / Express:** Backend services.
+  - **React:** Frontend application.
+  - **Go:** `helloworld-go` (Ex 5.6).
 
 ---
