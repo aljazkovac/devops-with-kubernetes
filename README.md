@@ -269,3 +269,10 @@ For full artifacts and commands, see the [knative-exercise/](knative-exercise/) 
   - **Go:** `helloworld-go` (Ex 5.6).
 
 ---
+
+## Certificate of completion
+
+![DevOps with Kubernetes](/certificate.png)
+_Certificate for completing the Docker with Kubernetes course_
+
+Validate the certificate at the [validation link](https://courses.mooc.fi/certificates/validate/e5ejzzzty47ea9n).
